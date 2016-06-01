@@ -1,0 +1,2388 @@
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> stmt_list
+Rule 2     stmt_list -> stmt SEMICOLON stmt_list
+Rule 3     stmt_list -> stmt
+Rule 4     stmt -> assign_stmt
+Rule 5     stmt -> while_stmt
+Rule 6     stmt -> if_stmt
+Rule 7     stmt -> define_stmt
+Rule 8     expr -> expr LESSTHAN expr
+Rule 9     expr -> expr GREATERTHAN expr
+Rule 10    expr -> expr GREATEREQUAL expr
+Rule 11    expr -> expr LESSEQUAL expr
+Rule 12    expr -> expr EQUAL expr
+Rule 13    expr -> expr NOTEQUAL expr
+Rule 14    expr -> expr PLUS term
+Rule 15    expr -> expr MINUS term
+Rule 16    expr -> list_stuff
+Rule 17    list_stuff -> LBRACKET expr_list RBRACKET
+Rule 18    list_stuff -> LBRACKET RBRACKET
+Rule 19    list_stuff -> CAR expr
+Rule 20    list_stuff -> CDR expr
+Rule 21    list_stuff -> CONS expr COMMA expr
+Rule 22    list_stuff -> NULL expr
+Rule 23    expr_list -> expr COMMA expr_list
+Rule 24    expr_list -> expr
+Rule 25    expr -> term
+Rule 26    term -> term TIMES fact
+Rule 27    term -> fact
+Rule 28    fact -> LPAREN expr RPAREN
+Rule 29    fact -> NUMBER
+Rule 30    fact -> IDENT
+Rule 31    fact -> func_call
+Rule 32    assign_stmt -> IDENT ASSIGNOP expr
+Rule 33    while_stmt -> WHILE expr DO stmt_list OD
+Rule 34    if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI
+Rule 35    define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END
+Rule 36    param_list -> IDENT COMMA param_list
+Rule 37    param_list -> IDENT
+Rule 38    func_call -> IDENT LPAREN expr_list RPAREN
+
+Terminals, with rules where they appear
+
+ASSIGNOP             : 32
+CAR                  : 19
+CDR                  : 20
+COMMA                : 21 23 36
+CONS                 : 21
+DEFINE               : 35
+DO                   : 33
+ELSE                 : 34
+END                  : 35
+EQUAL                : 12
+FI                   : 34
+GREATEREQUAL         : 10
+GREATERTHAN          : 9
+IDENT                : 30 32 35 36 37 38
+IF                   : 34
+LBRACKET             : 17 18
+LESSEQUAL            : 11
+LESSTHAN             : 8
+LPAREN               : 28 35 38
+MINUS                : 15
+NOTEQUAL             : 13
+NULL                 : 22
+NUMBER               : 29
+OD                   : 33
+PLUS                 : 14
+PROC                 : 35
+RBRACKET             : 17 18
+RPAREN               : 28 35 38
+SEMICOLON            : 2
+THEN                 : 34
+TIMES                : 26
+WHILE                : 33
+error                : 
+
+Nonterminals, with rules where they appear
+
+assign_stmt          : 4
+define_stmt          : 7
+expr                 : 8 8 9 9 10 10 11 11 12 12 13 13 14 15 19 20 21 21 22 23 24 28 32 33 34
+expr_list            : 17 23 38
+fact                 : 26 27
+func_call            : 31
+if_stmt              : 6
+list_stuff           : 16
+param_list           : 35 36
+program              : 0
+stmt                 : 2 3
+stmt_list            : 1 2 33 34 34 35
+term                 : 14 15 25 26
+while_stmt           : 5
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . stmt_list
+    (2) stmt_list -> . stmt SEMICOLON stmt_list
+    (3) stmt_list -> . stmt
+    (4) stmt -> . assign_stmt
+    (5) stmt -> . while_stmt
+    (6) stmt -> . if_stmt
+    (7) stmt -> . define_stmt
+    (32) assign_stmt -> . IDENT ASSIGNOP expr
+    (33) while_stmt -> . WHILE expr DO stmt_list OD
+    (34) if_stmt -> . IF expr THEN stmt_list ELSE stmt_list FI
+    (35) define_stmt -> . DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END
+
+    IDENT           shift and go to state 6
+    WHILE           shift and go to state 1
+    IF              shift and go to state 8
+    DEFINE          shift and go to state 5
+
+    stmt_list                      shift and go to state 9
+    if_stmt                        shift and go to state 10
+    define_stmt                    shift and go to state 2
+    stmt                           shift and go to state 7
+    assign_stmt                    shift and go to state 3
+    while_stmt                     shift and go to state 11
+    program                        shift and go to state 4
+
+state 1
+
+    (33) while_stmt -> WHILE . expr DO stmt_list OD
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr                           shift and go to state 21
+    list_stuff                     shift and go to state 22
+    fact                           shift and go to state 24
+
+state 2
+
+    (7) stmt -> define_stmt .
+
+    SEMICOLON       reduce using rule 7 (stmt -> define_stmt .)
+    ELSE            reduce using rule 7 (stmt -> define_stmt .)
+    END             reduce using rule 7 (stmt -> define_stmt .)
+    OD              reduce using rule 7 (stmt -> define_stmt .)
+    FI              reduce using rule 7 (stmt -> define_stmt .)
+    $end            reduce using rule 7 (stmt -> define_stmt .)
+
+
+state 3
+
+    (4) stmt -> assign_stmt .
+
+    SEMICOLON       reduce using rule 4 (stmt -> assign_stmt .)
+    ELSE            reduce using rule 4 (stmt -> assign_stmt .)
+    END             reduce using rule 4 (stmt -> assign_stmt .)
+    OD              reduce using rule 4 (stmt -> assign_stmt .)
+    FI              reduce using rule 4 (stmt -> assign_stmt .)
+    $end            reduce using rule 4 (stmt -> assign_stmt .)
+
+
+state 4
+
+    (0) S' -> program .
+
+
+
+state 5
+
+    (35) define_stmt -> DEFINE . IDENT PROC LPAREN param_list RPAREN stmt_list END
+
+    IDENT           shift and go to state 25
+
+
+state 6
+
+    (32) assign_stmt -> IDENT . ASSIGNOP expr
+
+    ASSIGNOP        shift and go to state 26
+
+
+state 7
+
+    (2) stmt_list -> stmt . SEMICOLON stmt_list
+    (3) stmt_list -> stmt .
+
+    SEMICOLON       shift and go to state 27
+    $end            reduce using rule 3 (stmt_list -> stmt .)
+    FI              reduce using rule 3 (stmt_list -> stmt .)
+    OD              reduce using rule 3 (stmt_list -> stmt .)
+    ELSE            reduce using rule 3 (stmt_list -> stmt .)
+    END             reduce using rule 3 (stmt_list -> stmt .)
+
+
+state 8
+
+    (34) if_stmt -> IF . expr THEN stmt_list ELSE stmt_list FI
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr                           shift and go to state 28
+    list_stuff                     shift and go to state 22
+    fact                           shift and go to state 24
+
+state 9
+
+    (1) program -> stmt_list .
+
+    $end            reduce using rule 1 (program -> stmt_list .)
+
+
+state 10
+
+    (6) stmt -> if_stmt .
+
+    SEMICOLON       reduce using rule 6 (stmt -> if_stmt .)
+    ELSE            reduce using rule 6 (stmt -> if_stmt .)
+    END             reduce using rule 6 (stmt -> if_stmt .)
+    OD              reduce using rule 6 (stmt -> if_stmt .)
+    FI              reduce using rule 6 (stmt -> if_stmt .)
+    $end            reduce using rule 6 (stmt -> if_stmt .)
+
+
+state 11
+
+    (5) stmt -> while_stmt .
+
+    SEMICOLON       reduce using rule 5 (stmt -> while_stmt .)
+    ELSE            reduce using rule 5 (stmt -> while_stmt .)
+    END             reduce using rule 5 (stmt -> while_stmt .)
+    OD              reduce using rule 5 (stmt -> while_stmt .)
+    FI              reduce using rule 5 (stmt -> while_stmt .)
+    $end            reduce using rule 5 (stmt -> while_stmt .)
+
+
+state 12
+
+    (21) list_stuff -> CONS . expr COMMA expr
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr                           shift and go to state 29
+    list_stuff                     shift and go to state 22
+    fact                           shift and go to state 24
+
+state 13
+
+    (19) list_stuff -> CAR . expr
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr                           shift and go to state 30
+    list_stuff                     shift and go to state 22
+    fact                           shift and go to state 24
+
+state 14
+
+    (17) list_stuff -> LBRACKET . expr_list RBRACKET
+    (18) list_stuff -> LBRACKET . RBRACKET
+    (23) expr_list -> . expr COMMA expr_list
+    (24) expr_list -> . expr
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    RBRACKET        shift and go to state 33
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr_list                      shift and go to state 31
+    list_stuff                     shift and go to state 22
+    expr                           shift and go to state 32
+    fact                           shift and go to state 24
+
+state 15
+
+    (22) list_stuff -> NULL . expr
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr                           shift and go to state 34
+    list_stuff                     shift and go to state 22
+    fact                           shift and go to state 24
+
+state 16
+
+    (31) fact -> func_call .
+
+    TIMES           reduce using rule 31 (fact -> func_call .)
+    LESSTHAN        reduce using rule 31 (fact -> func_call .)
+    GREATERTHAN     reduce using rule 31 (fact -> func_call .)
+    GREATEREQUAL    reduce using rule 31 (fact -> func_call .)
+    LESSEQUAL       reduce using rule 31 (fact -> func_call .)
+    EQUAL           reduce using rule 31 (fact -> func_call .)
+    NOTEQUAL        reduce using rule 31 (fact -> func_call .)
+    PLUS            reduce using rule 31 (fact -> func_call .)
+    MINUS           reduce using rule 31 (fact -> func_call .)
+    DO              reduce using rule 31 (fact -> func_call .)
+    THEN            reduce using rule 31 (fact -> func_call .)
+    COMMA           reduce using rule 31 (fact -> func_call .)
+    RBRACKET        reduce using rule 31 (fact -> func_call .)
+    RPAREN          reduce using rule 31 (fact -> func_call .)
+    SEMICOLON       reduce using rule 31 (fact -> func_call .)
+    $end            reduce using rule 31 (fact -> func_call .)
+    OD              reduce using rule 31 (fact -> func_call .)
+    ELSE            reduce using rule 31 (fact -> func_call .)
+    FI              reduce using rule 31 (fact -> func_call .)
+    END             reduce using rule 31 (fact -> func_call .)
+
+
+state 17
+
+    (30) fact -> IDENT .
+    (38) func_call -> IDENT . LPAREN expr_list RPAREN
+
+    TIMES           reduce using rule 30 (fact -> IDENT .)
+    LESSTHAN        reduce using rule 30 (fact -> IDENT .)
+    GREATERTHAN     reduce using rule 30 (fact -> IDENT .)
+    GREATEREQUAL    reduce using rule 30 (fact -> IDENT .)
+    LESSEQUAL       reduce using rule 30 (fact -> IDENT .)
+    EQUAL           reduce using rule 30 (fact -> IDENT .)
+    NOTEQUAL        reduce using rule 30 (fact -> IDENT .)
+    PLUS            reduce using rule 30 (fact -> IDENT .)
+    MINUS           reduce using rule 30 (fact -> IDENT .)
+    DO              reduce using rule 30 (fact -> IDENT .)
+    THEN            reduce using rule 30 (fact -> IDENT .)
+    COMMA           reduce using rule 30 (fact -> IDENT .)
+    RBRACKET        reduce using rule 30 (fact -> IDENT .)
+    RPAREN          reduce using rule 30 (fact -> IDENT .)
+    SEMICOLON       reduce using rule 30 (fact -> IDENT .)
+    $end            reduce using rule 30 (fact -> IDENT .)
+    OD              reduce using rule 30 (fact -> IDENT .)
+    ELSE            reduce using rule 30 (fact -> IDENT .)
+    FI              reduce using rule 30 (fact -> IDENT .)
+    END             reduce using rule 30 (fact -> IDENT .)
+    LPAREN          shift and go to state 35
+
+
+state 18
+
+    (29) fact -> NUMBER .
+
+    TIMES           reduce using rule 29 (fact -> NUMBER .)
+    LESSTHAN        reduce using rule 29 (fact -> NUMBER .)
+    GREATERTHAN     reduce using rule 29 (fact -> NUMBER .)
+    GREATEREQUAL    reduce using rule 29 (fact -> NUMBER .)
+    LESSEQUAL       reduce using rule 29 (fact -> NUMBER .)
+    EQUAL           reduce using rule 29 (fact -> NUMBER .)
+    NOTEQUAL        reduce using rule 29 (fact -> NUMBER .)
+    PLUS            reduce using rule 29 (fact -> NUMBER .)
+    MINUS           reduce using rule 29 (fact -> NUMBER .)
+    DO              reduce using rule 29 (fact -> NUMBER .)
+    THEN            reduce using rule 29 (fact -> NUMBER .)
+    COMMA           reduce using rule 29 (fact -> NUMBER .)
+    RBRACKET        reduce using rule 29 (fact -> NUMBER .)
+    RPAREN          reduce using rule 29 (fact -> NUMBER .)
+    SEMICOLON       reduce using rule 29 (fact -> NUMBER .)
+    $end            reduce using rule 29 (fact -> NUMBER .)
+    OD              reduce using rule 29 (fact -> NUMBER .)
+    ELSE            reduce using rule 29 (fact -> NUMBER .)
+    FI              reduce using rule 29 (fact -> NUMBER .)
+    END             reduce using rule 29 (fact -> NUMBER .)
+
+
+state 19
+
+    (28) fact -> LPAREN . expr RPAREN
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr                           shift and go to state 36
+    list_stuff                     shift and go to state 22
+    fact                           shift and go to state 24
+
+state 20
+
+    (25) expr -> term .
+    (26) term -> term . TIMES fact
+
+    LESSTHAN        reduce using rule 25 (expr -> term .)
+    GREATERTHAN     reduce using rule 25 (expr -> term .)
+    GREATEREQUAL    reduce using rule 25 (expr -> term .)
+    LESSEQUAL       reduce using rule 25 (expr -> term .)
+    EQUAL           reduce using rule 25 (expr -> term .)
+    NOTEQUAL        reduce using rule 25 (expr -> term .)
+    PLUS            reduce using rule 25 (expr -> term .)
+    MINUS           reduce using rule 25 (expr -> term .)
+    DO              reduce using rule 25 (expr -> term .)
+    THEN            reduce using rule 25 (expr -> term .)
+    COMMA           reduce using rule 25 (expr -> term .)
+    RBRACKET        reduce using rule 25 (expr -> term .)
+    RPAREN          reduce using rule 25 (expr -> term .)
+    SEMICOLON       reduce using rule 25 (expr -> term .)
+    $end            reduce using rule 25 (expr -> term .)
+    OD              reduce using rule 25 (expr -> term .)
+    ELSE            reduce using rule 25 (expr -> term .)
+    FI              reduce using rule 25 (expr -> term .)
+    END             reduce using rule 25 (expr -> term .)
+    TIMES           shift and go to state 37
+
+
+state 21
+
+    (33) while_stmt -> WHILE expr . DO stmt_list OD
+    (8) expr -> expr . LESSTHAN expr
+    (9) expr -> expr . GREATERTHAN expr
+    (10) expr -> expr . GREATEREQUAL expr
+    (11) expr -> expr . LESSEQUAL expr
+    (12) expr -> expr . EQUAL expr
+    (13) expr -> expr . NOTEQUAL expr
+    (14) expr -> expr . PLUS term
+    (15) expr -> expr . MINUS term
+
+    DO              shift and go to state 38
+    LESSTHAN        shift and go to state 41
+    GREATERTHAN     shift and go to state 43
+    GREATEREQUAL    shift and go to state 39
+    LESSEQUAL       shift and go to state 44
+    EQUAL           shift and go to state 42
+    NOTEQUAL        shift and go to state 40
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+
+
+state 22
+
+    (16) expr -> list_stuff .
+
+    LESSTHAN        reduce using rule 16 (expr -> list_stuff .)
+    GREATERTHAN     reduce using rule 16 (expr -> list_stuff .)
+    GREATEREQUAL    reduce using rule 16 (expr -> list_stuff .)
+    LESSEQUAL       reduce using rule 16 (expr -> list_stuff .)
+    EQUAL           reduce using rule 16 (expr -> list_stuff .)
+    NOTEQUAL        reduce using rule 16 (expr -> list_stuff .)
+    PLUS            reduce using rule 16 (expr -> list_stuff .)
+    MINUS           reduce using rule 16 (expr -> list_stuff .)
+    DO              reduce using rule 16 (expr -> list_stuff .)
+    THEN            reduce using rule 16 (expr -> list_stuff .)
+    COMMA           reduce using rule 16 (expr -> list_stuff .)
+    RBRACKET        reduce using rule 16 (expr -> list_stuff .)
+    RPAREN          reduce using rule 16 (expr -> list_stuff .)
+    SEMICOLON       reduce using rule 16 (expr -> list_stuff .)
+    $end            reduce using rule 16 (expr -> list_stuff .)
+    OD              reduce using rule 16 (expr -> list_stuff .)
+    ELSE            reduce using rule 16 (expr -> list_stuff .)
+    FI              reduce using rule 16 (expr -> list_stuff .)
+    END             reduce using rule 16 (expr -> list_stuff .)
+
+
+state 23
+
+    (20) list_stuff -> CDR . expr
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr                           shift and go to state 47
+    list_stuff                     shift and go to state 22
+    fact                           shift and go to state 24
+
+state 24
+
+    (27) term -> fact .
+
+    TIMES           reduce using rule 27 (term -> fact .)
+    DO              reduce using rule 27 (term -> fact .)
+    LESSTHAN        reduce using rule 27 (term -> fact .)
+    GREATERTHAN     reduce using rule 27 (term -> fact .)
+    GREATEREQUAL    reduce using rule 27 (term -> fact .)
+    LESSEQUAL       reduce using rule 27 (term -> fact .)
+    EQUAL           reduce using rule 27 (term -> fact .)
+    NOTEQUAL        reduce using rule 27 (term -> fact .)
+    PLUS            reduce using rule 27 (term -> fact .)
+    MINUS           reduce using rule 27 (term -> fact .)
+    THEN            reduce using rule 27 (term -> fact .)
+    COMMA           reduce using rule 27 (term -> fact .)
+    RBRACKET        reduce using rule 27 (term -> fact .)
+    RPAREN          reduce using rule 27 (term -> fact .)
+    SEMICOLON       reduce using rule 27 (term -> fact .)
+    $end            reduce using rule 27 (term -> fact .)
+    OD              reduce using rule 27 (term -> fact .)
+    ELSE            reduce using rule 27 (term -> fact .)
+    FI              reduce using rule 27 (term -> fact .)
+    END             reduce using rule 27 (term -> fact .)
+
+
+state 25
+
+    (35) define_stmt -> DEFINE IDENT . PROC LPAREN param_list RPAREN stmt_list END
+
+    PROC            shift and go to state 48
+
+
+state 26
+
+    (32) assign_stmt -> IDENT ASSIGNOP . expr
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr                           shift and go to state 49
+    list_stuff                     shift and go to state 22
+    fact                           shift and go to state 24
+
+state 27
+
+    (2) stmt_list -> stmt SEMICOLON . stmt_list
+    (2) stmt_list -> . stmt SEMICOLON stmt_list
+    (3) stmt_list -> . stmt
+    (4) stmt -> . assign_stmt
+    (5) stmt -> . while_stmt
+    (6) stmt -> . if_stmt
+    (7) stmt -> . define_stmt
+    (32) assign_stmt -> . IDENT ASSIGNOP expr
+    (33) while_stmt -> . WHILE expr DO stmt_list OD
+    (34) if_stmt -> . IF expr THEN stmt_list ELSE stmt_list FI
+    (35) define_stmt -> . DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END
+
+    IDENT           shift and go to state 6
+    WHILE           shift and go to state 1
+    IF              shift and go to state 8
+    DEFINE          shift and go to state 5
+
+    stmt_list                      shift and go to state 50
+    if_stmt                        shift and go to state 10
+    define_stmt                    shift and go to state 2
+    stmt                           shift and go to state 7
+    assign_stmt                    shift and go to state 3
+    while_stmt                     shift and go to state 11
+
+state 28
+
+    (34) if_stmt -> IF expr . THEN stmt_list ELSE stmt_list FI
+    (8) expr -> expr . LESSTHAN expr
+    (9) expr -> expr . GREATERTHAN expr
+    (10) expr -> expr . GREATEREQUAL expr
+    (11) expr -> expr . LESSEQUAL expr
+    (12) expr -> expr . EQUAL expr
+    (13) expr -> expr . NOTEQUAL expr
+    (14) expr -> expr . PLUS term
+    (15) expr -> expr . MINUS term
+
+    THEN            shift and go to state 51
+    LESSTHAN        shift and go to state 41
+    GREATERTHAN     shift and go to state 43
+    GREATEREQUAL    shift and go to state 39
+    LESSEQUAL       shift and go to state 44
+    EQUAL           shift and go to state 42
+    NOTEQUAL        shift and go to state 40
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+
+
+state 29
+
+    (21) list_stuff -> CONS expr . COMMA expr
+    (8) expr -> expr . LESSTHAN expr
+    (9) expr -> expr . GREATERTHAN expr
+    (10) expr -> expr . GREATEREQUAL expr
+    (11) expr -> expr . LESSEQUAL expr
+    (12) expr -> expr . EQUAL expr
+    (13) expr -> expr . NOTEQUAL expr
+    (14) expr -> expr . PLUS term
+    (15) expr -> expr . MINUS term
+
+    COMMA           shift and go to state 52
+    LESSTHAN        shift and go to state 41
+    GREATERTHAN     shift and go to state 43
+    GREATEREQUAL    shift and go to state 39
+    LESSEQUAL       shift and go to state 44
+    EQUAL           shift and go to state 42
+    NOTEQUAL        shift and go to state 40
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+
+
+state 30
+
+    (19) list_stuff -> CAR expr .
+    (8) expr -> expr . LESSTHAN expr
+    (9) expr -> expr . GREATERTHAN expr
+    (10) expr -> expr . GREATEREQUAL expr
+    (11) expr -> expr . LESSEQUAL expr
+    (12) expr -> expr . EQUAL expr
+    (13) expr -> expr . NOTEQUAL expr
+    (14) expr -> expr . PLUS term
+    (15) expr -> expr . MINUS term
+
+  ! shift/reduce conflict for LESSTHAN resolved as shift
+  ! shift/reduce conflict for GREATERTHAN resolved as shift
+  ! shift/reduce conflict for GREATEREQUAL resolved as shift
+  ! shift/reduce conflict for LESSEQUAL resolved as shift
+  ! shift/reduce conflict for EQUAL resolved as shift
+  ! shift/reduce conflict for NOTEQUAL resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+    DO              reduce using rule 19 (list_stuff -> CAR expr .)
+    THEN            reduce using rule 19 (list_stuff -> CAR expr .)
+    COMMA           reduce using rule 19 (list_stuff -> CAR expr .)
+    RBRACKET        reduce using rule 19 (list_stuff -> CAR expr .)
+    RPAREN          reduce using rule 19 (list_stuff -> CAR expr .)
+    SEMICOLON       reduce using rule 19 (list_stuff -> CAR expr .)
+    $end            reduce using rule 19 (list_stuff -> CAR expr .)
+    OD              reduce using rule 19 (list_stuff -> CAR expr .)
+    ELSE            reduce using rule 19 (list_stuff -> CAR expr .)
+    FI              reduce using rule 19 (list_stuff -> CAR expr .)
+    END             reduce using rule 19 (list_stuff -> CAR expr .)
+    LESSTHAN        shift and go to state 41
+    GREATERTHAN     shift and go to state 43
+    GREATEREQUAL    shift and go to state 39
+    LESSEQUAL       shift and go to state 44
+    EQUAL           shift and go to state 42
+    NOTEQUAL        shift and go to state 40
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+
+  ! LESSTHAN        [ reduce using rule 19 (list_stuff -> CAR expr .) ]
+  ! GREATERTHAN     [ reduce using rule 19 (list_stuff -> CAR expr .) ]
+  ! GREATEREQUAL    [ reduce using rule 19 (list_stuff -> CAR expr .) ]
+  ! LESSEQUAL       [ reduce using rule 19 (list_stuff -> CAR expr .) ]
+  ! EQUAL           [ reduce using rule 19 (list_stuff -> CAR expr .) ]
+  ! NOTEQUAL        [ reduce using rule 19 (list_stuff -> CAR expr .) ]
+  ! PLUS            [ reduce using rule 19 (list_stuff -> CAR expr .) ]
+  ! MINUS           [ reduce using rule 19 (list_stuff -> CAR expr .) ]
+
+
+state 31
+
+    (17) list_stuff -> LBRACKET expr_list . RBRACKET
+
+    RBRACKET        shift and go to state 53
+
+
+state 32
+
+    (23) expr_list -> expr . COMMA expr_list
+    (24) expr_list -> expr .
+    (8) expr -> expr . LESSTHAN expr
+    (9) expr -> expr . GREATERTHAN expr
+    (10) expr -> expr . GREATEREQUAL expr
+    (11) expr -> expr . LESSEQUAL expr
+    (12) expr -> expr . EQUAL expr
+    (13) expr -> expr . NOTEQUAL expr
+    (14) expr -> expr . PLUS term
+    (15) expr -> expr . MINUS term
+
+    COMMA           shift and go to state 54
+    RBRACKET        reduce using rule 24 (expr_list -> expr .)
+    RPAREN          reduce using rule 24 (expr_list -> expr .)
+    LESSTHAN        shift and go to state 41
+    GREATERTHAN     shift and go to state 43
+    GREATEREQUAL    shift and go to state 39
+    LESSEQUAL       shift and go to state 44
+    EQUAL           shift and go to state 42
+    NOTEQUAL        shift and go to state 40
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+
+
+state 33
+
+    (18) list_stuff -> LBRACKET RBRACKET .
+
+    LESSTHAN        reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    GREATERTHAN     reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    GREATEREQUAL    reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    LESSEQUAL       reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    EQUAL           reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    NOTEQUAL        reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    PLUS            reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    MINUS           reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    DO              reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    THEN            reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    COMMA           reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    RBRACKET        reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    RPAREN          reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    SEMICOLON       reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    $end            reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    OD              reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    ELSE            reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    FI              reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+    END             reduce using rule 18 (list_stuff -> LBRACKET RBRACKET .)
+
+
+state 34
+
+    (22) list_stuff -> NULL expr .
+    (8) expr -> expr . LESSTHAN expr
+    (9) expr -> expr . GREATERTHAN expr
+    (10) expr -> expr . GREATEREQUAL expr
+    (11) expr -> expr . LESSEQUAL expr
+    (12) expr -> expr . EQUAL expr
+    (13) expr -> expr . NOTEQUAL expr
+    (14) expr -> expr . PLUS term
+    (15) expr -> expr . MINUS term
+
+  ! shift/reduce conflict for LESSTHAN resolved as shift
+  ! shift/reduce conflict for GREATERTHAN resolved as shift
+  ! shift/reduce conflict for GREATEREQUAL resolved as shift
+  ! shift/reduce conflict for LESSEQUAL resolved as shift
+  ! shift/reduce conflict for EQUAL resolved as shift
+  ! shift/reduce conflict for NOTEQUAL resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+    DO              reduce using rule 22 (list_stuff -> NULL expr .)
+    THEN            reduce using rule 22 (list_stuff -> NULL expr .)
+    COMMA           reduce using rule 22 (list_stuff -> NULL expr .)
+    RBRACKET        reduce using rule 22 (list_stuff -> NULL expr .)
+    RPAREN          reduce using rule 22 (list_stuff -> NULL expr .)
+    SEMICOLON       reduce using rule 22 (list_stuff -> NULL expr .)
+    $end            reduce using rule 22 (list_stuff -> NULL expr .)
+    OD              reduce using rule 22 (list_stuff -> NULL expr .)
+    ELSE            reduce using rule 22 (list_stuff -> NULL expr .)
+    FI              reduce using rule 22 (list_stuff -> NULL expr .)
+    END             reduce using rule 22 (list_stuff -> NULL expr .)
+    LESSTHAN        shift and go to state 41
+    GREATERTHAN     shift and go to state 43
+    GREATEREQUAL    shift and go to state 39
+    LESSEQUAL       shift and go to state 44
+    EQUAL           shift and go to state 42
+    NOTEQUAL        shift and go to state 40
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+
+  ! LESSTHAN        [ reduce using rule 22 (list_stuff -> NULL expr .) ]
+  ! GREATERTHAN     [ reduce using rule 22 (list_stuff -> NULL expr .) ]
+  ! GREATEREQUAL    [ reduce using rule 22 (list_stuff -> NULL expr .) ]
+  ! LESSEQUAL       [ reduce using rule 22 (list_stuff -> NULL expr .) ]
+  ! EQUAL           [ reduce using rule 22 (list_stuff -> NULL expr .) ]
+  ! NOTEQUAL        [ reduce using rule 22 (list_stuff -> NULL expr .) ]
+  ! PLUS            [ reduce using rule 22 (list_stuff -> NULL expr .) ]
+  ! MINUS           [ reduce using rule 22 (list_stuff -> NULL expr .) ]
+
+
+state 35
+
+    (38) func_call -> IDENT LPAREN . expr_list RPAREN
+    (23) expr_list -> . expr COMMA expr_list
+    (24) expr_list -> . expr
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr_list                      shift and go to state 55
+    list_stuff                     shift and go to state 22
+    expr                           shift and go to state 32
+    fact                           shift and go to state 24
+
+state 36
+
+    (28) fact -> LPAREN expr . RPAREN
+    (8) expr -> expr . LESSTHAN expr
+    (9) expr -> expr . GREATERTHAN expr
+    (10) expr -> expr . GREATEREQUAL expr
+    (11) expr -> expr . LESSEQUAL expr
+    (12) expr -> expr . EQUAL expr
+    (13) expr -> expr . NOTEQUAL expr
+    (14) expr -> expr . PLUS term
+    (15) expr -> expr . MINUS term
+
+    RPAREN          shift and go to state 56
+    LESSTHAN        shift and go to state 41
+    GREATERTHAN     shift and go to state 43
+    GREATEREQUAL    shift and go to state 39
+    LESSEQUAL       shift and go to state 44
+    EQUAL           shift and go to state 42
+    NOTEQUAL        shift and go to state 40
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+
+
+state 37
+
+    (26) term -> term TIMES . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    fact                           shift and go to state 57
+
+state 38
+
+    (33) while_stmt -> WHILE expr DO . stmt_list OD
+    (2) stmt_list -> . stmt SEMICOLON stmt_list
+    (3) stmt_list -> . stmt
+    (4) stmt -> . assign_stmt
+    (5) stmt -> . while_stmt
+    (6) stmt -> . if_stmt
+    (7) stmt -> . define_stmt
+    (32) assign_stmt -> . IDENT ASSIGNOP expr
+    (33) while_stmt -> . WHILE expr DO stmt_list OD
+    (34) if_stmt -> . IF expr THEN stmt_list ELSE stmt_list FI
+    (35) define_stmt -> . DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END
+
+    IDENT           shift and go to state 6
+    WHILE           shift and go to state 1
+    IF              shift and go to state 8
+    DEFINE          shift and go to state 5
+
+    stmt_list                      shift and go to state 58
+    if_stmt                        shift and go to state 10
+    define_stmt                    shift and go to state 2
+    stmt                           shift and go to state 7
+    assign_stmt                    shift and go to state 3
+    while_stmt                     shift and go to state 11
+
+state 39
+
+    (10) expr -> expr GREATEREQUAL . expr
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr                           shift and go to state 59
+    list_stuff                     shift and go to state 22
+    fact                           shift and go to state 24
+
+state 40
+
+    (13) expr -> expr NOTEQUAL . expr
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr                           shift and go to state 60
+    list_stuff                     shift and go to state 22
+    fact                           shift and go to state 24
+
+state 41
+
+    (8) expr -> expr LESSTHAN . expr
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr                           shift and go to state 61
+    list_stuff                     shift and go to state 22
+    fact                           shift and go to state 24
+
+state 42
+
+    (12) expr -> expr EQUAL . expr
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr                           shift and go to state 62
+    list_stuff                     shift and go to state 22
+    fact                           shift and go to state 24
+
+state 43
+
+    (9) expr -> expr GREATERTHAN . expr
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr                           shift and go to state 63
+    list_stuff                     shift and go to state 22
+    fact                           shift and go to state 24
+
+state 44
+
+    (11) expr -> expr LESSEQUAL . expr
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr                           shift and go to state 64
+    list_stuff                     shift and go to state 22
+    fact                           shift and go to state 24
+
+state 45
+
+    (14) expr -> expr PLUS . term
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 65
+    fact                           shift and go to state 24
+
+state 46
+
+    (15) expr -> expr MINUS . term
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 66
+    fact                           shift and go to state 24
+
+state 47
+
+    (20) list_stuff -> CDR expr .
+    (8) expr -> expr . LESSTHAN expr
+    (9) expr -> expr . GREATERTHAN expr
+    (10) expr -> expr . GREATEREQUAL expr
+    (11) expr -> expr . LESSEQUAL expr
+    (12) expr -> expr . EQUAL expr
+    (13) expr -> expr . NOTEQUAL expr
+    (14) expr -> expr . PLUS term
+    (15) expr -> expr . MINUS term
+
+  ! shift/reduce conflict for LESSTHAN resolved as shift
+  ! shift/reduce conflict for GREATERTHAN resolved as shift
+  ! shift/reduce conflict for GREATEREQUAL resolved as shift
+  ! shift/reduce conflict for LESSEQUAL resolved as shift
+  ! shift/reduce conflict for EQUAL resolved as shift
+  ! shift/reduce conflict for NOTEQUAL resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+    DO              reduce using rule 20 (list_stuff -> CDR expr .)
+    THEN            reduce using rule 20 (list_stuff -> CDR expr .)
+    COMMA           reduce using rule 20 (list_stuff -> CDR expr .)
+    RBRACKET        reduce using rule 20 (list_stuff -> CDR expr .)
+    RPAREN          reduce using rule 20 (list_stuff -> CDR expr .)
+    SEMICOLON       reduce using rule 20 (list_stuff -> CDR expr .)
+    $end            reduce using rule 20 (list_stuff -> CDR expr .)
+    OD              reduce using rule 20 (list_stuff -> CDR expr .)
+    ELSE            reduce using rule 20 (list_stuff -> CDR expr .)
+    FI              reduce using rule 20 (list_stuff -> CDR expr .)
+    END             reduce using rule 20 (list_stuff -> CDR expr .)
+    LESSTHAN        shift and go to state 41
+    GREATERTHAN     shift and go to state 43
+    GREATEREQUAL    shift and go to state 39
+    LESSEQUAL       shift and go to state 44
+    EQUAL           shift and go to state 42
+    NOTEQUAL        shift and go to state 40
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+
+  ! LESSTHAN        [ reduce using rule 20 (list_stuff -> CDR expr .) ]
+  ! GREATERTHAN     [ reduce using rule 20 (list_stuff -> CDR expr .) ]
+  ! GREATEREQUAL    [ reduce using rule 20 (list_stuff -> CDR expr .) ]
+  ! LESSEQUAL       [ reduce using rule 20 (list_stuff -> CDR expr .) ]
+  ! EQUAL           [ reduce using rule 20 (list_stuff -> CDR expr .) ]
+  ! NOTEQUAL        [ reduce using rule 20 (list_stuff -> CDR expr .) ]
+  ! PLUS            [ reduce using rule 20 (list_stuff -> CDR expr .) ]
+  ! MINUS           [ reduce using rule 20 (list_stuff -> CDR expr .) ]
+
+
+state 48
+
+    (35) define_stmt -> DEFINE IDENT PROC . LPAREN param_list RPAREN stmt_list END
+
+    LPAREN          shift and go to state 67
+
+
+state 49
+
+    (32) assign_stmt -> IDENT ASSIGNOP expr .
+    (8) expr -> expr . LESSTHAN expr
+    (9) expr -> expr . GREATERTHAN expr
+    (10) expr -> expr . GREATEREQUAL expr
+    (11) expr -> expr . LESSEQUAL expr
+    (12) expr -> expr . EQUAL expr
+    (13) expr -> expr . NOTEQUAL expr
+    (14) expr -> expr . PLUS term
+    (15) expr -> expr . MINUS term
+
+    SEMICOLON       reduce using rule 32 (assign_stmt -> IDENT ASSIGNOP expr .)
+    $end            reduce using rule 32 (assign_stmt -> IDENT ASSIGNOP expr .)
+    END             reduce using rule 32 (assign_stmt -> IDENT ASSIGNOP expr .)
+    FI              reduce using rule 32 (assign_stmt -> IDENT ASSIGNOP expr .)
+    ELSE            reduce using rule 32 (assign_stmt -> IDENT ASSIGNOP expr .)
+    OD              reduce using rule 32 (assign_stmt -> IDENT ASSIGNOP expr .)
+    LESSTHAN        shift and go to state 41
+    GREATERTHAN     shift and go to state 43
+    GREATEREQUAL    shift and go to state 39
+    LESSEQUAL       shift and go to state 44
+    EQUAL           shift and go to state 42
+    NOTEQUAL        shift and go to state 40
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+
+
+state 50
+
+    (2) stmt_list -> stmt SEMICOLON stmt_list .
+
+    $end            reduce using rule 2 (stmt_list -> stmt SEMICOLON stmt_list .)
+    FI              reduce using rule 2 (stmt_list -> stmt SEMICOLON stmt_list .)
+    OD              reduce using rule 2 (stmt_list -> stmt SEMICOLON stmt_list .)
+    ELSE            reduce using rule 2 (stmt_list -> stmt SEMICOLON stmt_list .)
+    END             reduce using rule 2 (stmt_list -> stmt SEMICOLON stmt_list .)
+
+
+state 51
+
+    (34) if_stmt -> IF expr THEN . stmt_list ELSE stmt_list FI
+    (2) stmt_list -> . stmt SEMICOLON stmt_list
+    (3) stmt_list -> . stmt
+    (4) stmt -> . assign_stmt
+    (5) stmt -> . while_stmt
+    (6) stmt -> . if_stmt
+    (7) stmt -> . define_stmt
+    (32) assign_stmt -> . IDENT ASSIGNOP expr
+    (33) while_stmt -> . WHILE expr DO stmt_list OD
+    (34) if_stmt -> . IF expr THEN stmt_list ELSE stmt_list FI
+    (35) define_stmt -> . DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END
+
+    IDENT           shift and go to state 6
+    WHILE           shift and go to state 1
+    IF              shift and go to state 8
+    DEFINE          shift and go to state 5
+
+    stmt_list                      shift and go to state 68
+    if_stmt                        shift and go to state 10
+    define_stmt                    shift and go to state 2
+    stmt                           shift and go to state 7
+    assign_stmt                    shift and go to state 3
+    while_stmt                     shift and go to state 11
+
+state 52
+
+    (21) list_stuff -> CONS expr COMMA . expr
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr                           shift and go to state 69
+    list_stuff                     shift and go to state 22
+    fact                           shift and go to state 24
+
+state 53
+
+    (17) list_stuff -> LBRACKET expr_list RBRACKET .
+
+    LESSTHAN        reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    GREATERTHAN     reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    GREATEREQUAL    reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    LESSEQUAL       reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    EQUAL           reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    NOTEQUAL        reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    PLUS            reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    MINUS           reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    DO              reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    THEN            reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    COMMA           reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    RBRACKET        reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    RPAREN          reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    SEMICOLON       reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    $end            reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    OD              reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    ELSE            reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    FI              reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+    END             reduce using rule 17 (list_stuff -> LBRACKET expr_list RBRACKET .)
+
+
+state 54
+
+    (23) expr_list -> expr COMMA . expr_list
+    (23) expr_list -> . expr COMMA expr_list
+    (24) expr_list -> . expr
+    (8) expr -> . expr LESSTHAN expr
+    (9) expr -> . expr GREATERTHAN expr
+    (10) expr -> . expr GREATEREQUAL expr
+    (11) expr -> . expr LESSEQUAL expr
+    (12) expr -> . expr EQUAL expr
+    (13) expr -> . expr NOTEQUAL expr
+    (14) expr -> . expr PLUS term
+    (15) expr -> . expr MINUS term
+    (16) expr -> . list_stuff
+    (25) expr -> . term
+    (17) list_stuff -> . LBRACKET expr_list RBRACKET
+    (18) list_stuff -> . LBRACKET RBRACKET
+    (19) list_stuff -> . CAR expr
+    (20) list_stuff -> . CDR expr
+    (21) list_stuff -> . CONS expr COMMA expr
+    (22) list_stuff -> . NULL expr
+    (26) term -> . term TIMES fact
+    (27) term -> . fact
+    (28) fact -> . LPAREN expr RPAREN
+    (29) fact -> . NUMBER
+    (30) fact -> . IDENT
+    (31) fact -> . func_call
+    (38) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 14
+    CAR             shift and go to state 13
+    CDR             shift and go to state 23
+    CONS            shift and go to state 12
+    NULL            shift and go to state 15
+    LPAREN          shift and go to state 19
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 17
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 20
+    expr                           shift and go to state 32
+    list_stuff                     shift and go to state 22
+    expr_list                      shift and go to state 70
+    fact                           shift and go to state 24
+
+state 55
+
+    (38) func_call -> IDENT LPAREN expr_list . RPAREN
+
+    RPAREN          shift and go to state 71
+
+
+state 56
+
+    (28) fact -> LPAREN expr RPAREN .
+
+    TIMES           reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    LESSTHAN        reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    GREATERTHAN     reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    GREATEREQUAL    reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    LESSEQUAL       reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    EQUAL           reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    NOTEQUAL        reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    PLUS            reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    MINUS           reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    DO              reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    THEN            reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    COMMA           reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    RBRACKET        reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    RPAREN          reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    SEMICOLON       reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    $end            reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    OD              reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    ELSE            reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    FI              reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+    END             reduce using rule 28 (fact -> LPAREN expr RPAREN .)
+
+
+state 57
+
+    (26) term -> term TIMES fact .
+
+    TIMES           reduce using rule 26 (term -> term TIMES fact .)
+    DO              reduce using rule 26 (term -> term TIMES fact .)
+    LESSTHAN        reduce using rule 26 (term -> term TIMES fact .)
+    GREATERTHAN     reduce using rule 26 (term -> term TIMES fact .)
+    GREATEREQUAL    reduce using rule 26 (term -> term TIMES fact .)
+    LESSEQUAL       reduce using rule 26 (term -> term TIMES fact .)
+    EQUAL           reduce using rule 26 (term -> term TIMES fact .)
+    NOTEQUAL        reduce using rule 26 (term -> term TIMES fact .)
+    PLUS            reduce using rule 26 (term -> term TIMES fact .)
+    MINUS           reduce using rule 26 (term -> term TIMES fact .)
+    THEN            reduce using rule 26 (term -> term TIMES fact .)
+    COMMA           reduce using rule 26 (term -> term TIMES fact .)
+    RBRACKET        reduce using rule 26 (term -> term TIMES fact .)
+    RPAREN          reduce using rule 26 (term -> term TIMES fact .)
+    SEMICOLON       reduce using rule 26 (term -> term TIMES fact .)
+    $end            reduce using rule 26 (term -> term TIMES fact .)
+    OD              reduce using rule 26 (term -> term TIMES fact .)
+    ELSE            reduce using rule 26 (term -> term TIMES fact .)
+    FI              reduce using rule 26 (term -> term TIMES fact .)
+    END             reduce using rule 26 (term -> term TIMES fact .)
+
+
+state 58
+
+    (33) while_stmt -> WHILE expr DO stmt_list . OD
+
+    OD              shift and go to state 72
+
+
+state 59
+
+    (10) expr -> expr GREATEREQUAL expr .
+    (8) expr -> expr . LESSTHAN expr
+    (9) expr -> expr . GREATERTHAN expr
+    (10) expr -> expr . GREATEREQUAL expr
+    (11) expr -> expr . LESSEQUAL expr
+    (12) expr -> expr . EQUAL expr
+    (13) expr -> expr . NOTEQUAL expr
+    (14) expr -> expr . PLUS term
+    (15) expr -> expr . MINUS term
+
+  ! shift/reduce conflict for LESSTHAN resolved as shift
+  ! shift/reduce conflict for GREATERTHAN resolved as shift
+  ! shift/reduce conflict for GREATEREQUAL resolved as shift
+  ! shift/reduce conflict for LESSEQUAL resolved as shift
+  ! shift/reduce conflict for EQUAL resolved as shift
+  ! shift/reduce conflict for NOTEQUAL resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+    DO              reduce using rule 10 (expr -> expr GREATEREQUAL expr .)
+    THEN            reduce using rule 10 (expr -> expr GREATEREQUAL expr .)
+    COMMA           reduce using rule 10 (expr -> expr GREATEREQUAL expr .)
+    RBRACKET        reduce using rule 10 (expr -> expr GREATEREQUAL expr .)
+    RPAREN          reduce using rule 10 (expr -> expr GREATEREQUAL expr .)
+    SEMICOLON       reduce using rule 10 (expr -> expr GREATEREQUAL expr .)
+    $end            reduce using rule 10 (expr -> expr GREATEREQUAL expr .)
+    OD              reduce using rule 10 (expr -> expr GREATEREQUAL expr .)
+    ELSE            reduce using rule 10 (expr -> expr GREATEREQUAL expr .)
+    FI              reduce using rule 10 (expr -> expr GREATEREQUAL expr .)
+    END             reduce using rule 10 (expr -> expr GREATEREQUAL expr .)
+    LESSTHAN        shift and go to state 41
+    GREATERTHAN     shift and go to state 43
+    GREATEREQUAL    shift and go to state 39
+    LESSEQUAL       shift and go to state 44
+    EQUAL           shift and go to state 42
+    NOTEQUAL        shift and go to state 40
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+
+  ! LESSTHAN        [ reduce using rule 10 (expr -> expr GREATEREQUAL expr .) ]
+  ! GREATERTHAN     [ reduce using rule 10 (expr -> expr GREATEREQUAL expr .) ]
+  ! GREATEREQUAL    [ reduce using rule 10 (expr -> expr GREATEREQUAL expr .) ]
+  ! LESSEQUAL       [ reduce using rule 10 (expr -> expr GREATEREQUAL expr .) ]
+  ! EQUAL           [ reduce using rule 10 (expr -> expr GREATEREQUAL expr .) ]
+  ! NOTEQUAL        [ reduce using rule 10 (expr -> expr GREATEREQUAL expr .) ]
+  ! PLUS            [ reduce using rule 10 (expr -> expr GREATEREQUAL expr .) ]
+  ! MINUS           [ reduce using rule 10 (expr -> expr GREATEREQUAL expr .) ]
+
+
+state 60
+
+    (13) expr -> expr NOTEQUAL expr .
+    (8) expr -> expr . LESSTHAN expr
+    (9) expr -> expr . GREATERTHAN expr
+    (10) expr -> expr . GREATEREQUAL expr
+    (11) expr -> expr . LESSEQUAL expr
+    (12) expr -> expr . EQUAL expr
+    (13) expr -> expr . NOTEQUAL expr
+    (14) expr -> expr . PLUS term
+    (15) expr -> expr . MINUS term
+
+  ! shift/reduce conflict for LESSTHAN resolved as shift
+  ! shift/reduce conflict for GREATERTHAN resolved as shift
+  ! shift/reduce conflict for GREATEREQUAL resolved as shift
+  ! shift/reduce conflict for LESSEQUAL resolved as shift
+  ! shift/reduce conflict for EQUAL resolved as shift
+  ! shift/reduce conflict for NOTEQUAL resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+    DO              reduce using rule 13 (expr -> expr NOTEQUAL expr .)
+    THEN            reduce using rule 13 (expr -> expr NOTEQUAL expr .)
+    COMMA           reduce using rule 13 (expr -> expr NOTEQUAL expr .)
+    RBRACKET        reduce using rule 13 (expr -> expr NOTEQUAL expr .)
+    RPAREN          reduce using rule 13 (expr -> expr NOTEQUAL expr .)
+    SEMICOLON       reduce using rule 13 (expr -> expr NOTEQUAL expr .)
+    $end            reduce using rule 13 (expr -> expr NOTEQUAL expr .)
+    OD              reduce using rule 13 (expr -> expr NOTEQUAL expr .)
+    ELSE            reduce using rule 13 (expr -> expr NOTEQUAL expr .)
+    FI              reduce using rule 13 (expr -> expr NOTEQUAL expr .)
+    END             reduce using rule 13 (expr -> expr NOTEQUAL expr .)
+    LESSTHAN        shift and go to state 41
+    GREATERTHAN     shift and go to state 43
+    GREATEREQUAL    shift and go to state 39
+    LESSEQUAL       shift and go to state 44
+    EQUAL           shift and go to state 42
+    NOTEQUAL        shift and go to state 40
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+
+  ! LESSTHAN        [ reduce using rule 13 (expr -> expr NOTEQUAL expr .) ]
+  ! GREATERTHAN     [ reduce using rule 13 (expr -> expr NOTEQUAL expr .) ]
+  ! GREATEREQUAL    [ reduce using rule 13 (expr -> expr NOTEQUAL expr .) ]
+  ! LESSEQUAL       [ reduce using rule 13 (expr -> expr NOTEQUAL expr .) ]
+  ! EQUAL           [ reduce using rule 13 (expr -> expr NOTEQUAL expr .) ]
+  ! NOTEQUAL        [ reduce using rule 13 (expr -> expr NOTEQUAL expr .) ]
+  ! PLUS            [ reduce using rule 13 (expr -> expr NOTEQUAL expr .) ]
+  ! MINUS           [ reduce using rule 13 (expr -> expr NOTEQUAL expr .) ]
+
+
+state 61
+
+    (8) expr -> expr LESSTHAN expr .
+    (8) expr -> expr . LESSTHAN expr
+    (9) expr -> expr . GREATERTHAN expr
+    (10) expr -> expr . GREATEREQUAL expr
+    (11) expr -> expr . LESSEQUAL expr
+    (12) expr -> expr . EQUAL expr
+    (13) expr -> expr . NOTEQUAL expr
+    (14) expr -> expr . PLUS term
+    (15) expr -> expr . MINUS term
+
+  ! shift/reduce conflict for LESSTHAN resolved as shift
+  ! shift/reduce conflict for GREATERTHAN resolved as shift
+  ! shift/reduce conflict for GREATEREQUAL resolved as shift
+  ! shift/reduce conflict for LESSEQUAL resolved as shift
+  ! shift/reduce conflict for EQUAL resolved as shift
+  ! shift/reduce conflict for NOTEQUAL resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+    DO              reduce using rule 8 (expr -> expr LESSTHAN expr .)
+    THEN            reduce using rule 8 (expr -> expr LESSTHAN expr .)
+    COMMA           reduce using rule 8 (expr -> expr LESSTHAN expr .)
+    RBRACKET        reduce using rule 8 (expr -> expr LESSTHAN expr .)
+    RPAREN          reduce using rule 8 (expr -> expr LESSTHAN expr .)
+    SEMICOLON       reduce using rule 8 (expr -> expr LESSTHAN expr .)
+    $end            reduce using rule 8 (expr -> expr LESSTHAN expr .)
+    OD              reduce using rule 8 (expr -> expr LESSTHAN expr .)
+    ELSE            reduce using rule 8 (expr -> expr LESSTHAN expr .)
+    FI              reduce using rule 8 (expr -> expr LESSTHAN expr .)
+    END             reduce using rule 8 (expr -> expr LESSTHAN expr .)
+    LESSTHAN        shift and go to state 41
+    GREATERTHAN     shift and go to state 43
+    GREATEREQUAL    shift and go to state 39
+    LESSEQUAL       shift and go to state 44
+    EQUAL           shift and go to state 42
+    NOTEQUAL        shift and go to state 40
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+
+  ! LESSTHAN        [ reduce using rule 8 (expr -> expr LESSTHAN expr .) ]
+  ! GREATERTHAN     [ reduce using rule 8 (expr -> expr LESSTHAN expr .) ]
+  ! GREATEREQUAL    [ reduce using rule 8 (expr -> expr LESSTHAN expr .) ]
+  ! LESSEQUAL       [ reduce using rule 8 (expr -> expr LESSTHAN expr .) ]
+  ! EQUAL           [ reduce using rule 8 (expr -> expr LESSTHAN expr .) ]
+  ! NOTEQUAL        [ reduce using rule 8 (expr -> expr LESSTHAN expr .) ]
+  ! PLUS            [ reduce using rule 8 (expr -> expr LESSTHAN expr .) ]
+  ! MINUS           [ reduce using rule 8 (expr -> expr LESSTHAN expr .) ]
+
+
+state 62
+
+    (12) expr -> expr EQUAL expr .
+    (8) expr -> expr . LESSTHAN expr
+    (9) expr -> expr . GREATERTHAN expr
+    (10) expr -> expr . GREATEREQUAL expr
+    (11) expr -> expr . LESSEQUAL expr
+    (12) expr -> expr . EQUAL expr
+    (13) expr -> expr . NOTEQUAL expr
+    (14) expr -> expr . PLUS term
+    (15) expr -> expr . MINUS term
+
+  ! shift/reduce conflict for LESSTHAN resolved as shift
+  ! shift/reduce conflict for GREATERTHAN resolved as shift
+  ! shift/reduce conflict for GREATEREQUAL resolved as shift
+  ! shift/reduce conflict for LESSEQUAL resolved as shift
+  ! shift/reduce conflict for EQUAL resolved as shift
+  ! shift/reduce conflict for NOTEQUAL resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+    DO              reduce using rule 12 (expr -> expr EQUAL expr .)
+    THEN            reduce using rule 12 (expr -> expr EQUAL expr .)
+    COMMA           reduce using rule 12 (expr -> expr EQUAL expr .)
+    RBRACKET        reduce using rule 12 (expr -> expr EQUAL expr .)
+    RPAREN          reduce using rule 12 (expr -> expr EQUAL expr .)
+    SEMICOLON       reduce using rule 12 (expr -> expr EQUAL expr .)
+    $end            reduce using rule 12 (expr -> expr EQUAL expr .)
+    OD              reduce using rule 12 (expr -> expr EQUAL expr .)
+    ELSE            reduce using rule 12 (expr -> expr EQUAL expr .)
+    FI              reduce using rule 12 (expr -> expr EQUAL expr .)
+    END             reduce using rule 12 (expr -> expr EQUAL expr .)
+    LESSTHAN        shift and go to state 41
+    GREATERTHAN     shift and go to state 43
+    GREATEREQUAL    shift and go to state 39
+    LESSEQUAL       shift and go to state 44
+    EQUAL           shift and go to state 42
+    NOTEQUAL        shift and go to state 40
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+
+  ! LESSTHAN        [ reduce using rule 12 (expr -> expr EQUAL expr .) ]
+  ! GREATERTHAN     [ reduce using rule 12 (expr -> expr EQUAL expr .) ]
+  ! GREATEREQUAL    [ reduce using rule 12 (expr -> expr EQUAL expr .) ]
+  ! LESSEQUAL       [ reduce using rule 12 (expr -> expr EQUAL expr .) ]
+  ! EQUAL           [ reduce using rule 12 (expr -> expr EQUAL expr .) ]
+  ! NOTEQUAL        [ reduce using rule 12 (expr -> expr EQUAL expr .) ]
+  ! PLUS            [ reduce using rule 12 (expr -> expr EQUAL expr .) ]
+  ! MINUS           [ reduce using rule 12 (expr -> expr EQUAL expr .) ]
+
+
+state 63
+
+    (9) expr -> expr GREATERTHAN expr .
+    (8) expr -> expr . LESSTHAN expr
+    (9) expr -> expr . GREATERTHAN expr
+    (10) expr -> expr . GREATEREQUAL expr
+    (11) expr -> expr . LESSEQUAL expr
+    (12) expr -> expr . EQUAL expr
+    (13) expr -> expr . NOTEQUAL expr
+    (14) expr -> expr . PLUS term
+    (15) expr -> expr . MINUS term
+
+  ! shift/reduce conflict for LESSTHAN resolved as shift
+  ! shift/reduce conflict for GREATERTHAN resolved as shift
+  ! shift/reduce conflict for GREATEREQUAL resolved as shift
+  ! shift/reduce conflict for LESSEQUAL resolved as shift
+  ! shift/reduce conflict for EQUAL resolved as shift
+  ! shift/reduce conflict for NOTEQUAL resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+    DO              reduce using rule 9 (expr -> expr GREATERTHAN expr .)
+    THEN            reduce using rule 9 (expr -> expr GREATERTHAN expr .)
+    COMMA           reduce using rule 9 (expr -> expr GREATERTHAN expr .)
+    RBRACKET        reduce using rule 9 (expr -> expr GREATERTHAN expr .)
+    RPAREN          reduce using rule 9 (expr -> expr GREATERTHAN expr .)
+    SEMICOLON       reduce using rule 9 (expr -> expr GREATERTHAN expr .)
+    $end            reduce using rule 9 (expr -> expr GREATERTHAN expr .)
+    OD              reduce using rule 9 (expr -> expr GREATERTHAN expr .)
+    ELSE            reduce using rule 9 (expr -> expr GREATERTHAN expr .)
+    FI              reduce using rule 9 (expr -> expr GREATERTHAN expr .)
+    END             reduce using rule 9 (expr -> expr GREATERTHAN expr .)
+    LESSTHAN        shift and go to state 41
+    GREATERTHAN     shift and go to state 43
+    GREATEREQUAL    shift and go to state 39
+    LESSEQUAL       shift and go to state 44
+    EQUAL           shift and go to state 42
+    NOTEQUAL        shift and go to state 40
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+
+  ! LESSTHAN        [ reduce using rule 9 (expr -> expr GREATERTHAN expr .) ]
+  ! GREATERTHAN     [ reduce using rule 9 (expr -> expr GREATERTHAN expr .) ]
+  ! GREATEREQUAL    [ reduce using rule 9 (expr -> expr GREATERTHAN expr .) ]
+  ! LESSEQUAL       [ reduce using rule 9 (expr -> expr GREATERTHAN expr .) ]
+  ! EQUAL           [ reduce using rule 9 (expr -> expr GREATERTHAN expr .) ]
+  ! NOTEQUAL        [ reduce using rule 9 (expr -> expr GREATERTHAN expr .) ]
+  ! PLUS            [ reduce using rule 9 (expr -> expr GREATERTHAN expr .) ]
+  ! MINUS           [ reduce using rule 9 (expr -> expr GREATERTHAN expr .) ]
+
+
+state 64
+
+    (11) expr -> expr LESSEQUAL expr .
+    (8) expr -> expr . LESSTHAN expr
+    (9) expr -> expr . GREATERTHAN expr
+    (10) expr -> expr . GREATEREQUAL expr
+    (11) expr -> expr . LESSEQUAL expr
+    (12) expr -> expr . EQUAL expr
+    (13) expr -> expr . NOTEQUAL expr
+    (14) expr -> expr . PLUS term
+    (15) expr -> expr . MINUS term
+
+  ! shift/reduce conflict for LESSTHAN resolved as shift
+  ! shift/reduce conflict for GREATERTHAN resolved as shift
+  ! shift/reduce conflict for GREATEREQUAL resolved as shift
+  ! shift/reduce conflict for LESSEQUAL resolved as shift
+  ! shift/reduce conflict for EQUAL resolved as shift
+  ! shift/reduce conflict for NOTEQUAL resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+    DO              reduce using rule 11 (expr -> expr LESSEQUAL expr .)
+    THEN            reduce using rule 11 (expr -> expr LESSEQUAL expr .)
+    COMMA           reduce using rule 11 (expr -> expr LESSEQUAL expr .)
+    RBRACKET        reduce using rule 11 (expr -> expr LESSEQUAL expr .)
+    RPAREN          reduce using rule 11 (expr -> expr LESSEQUAL expr .)
+    SEMICOLON       reduce using rule 11 (expr -> expr LESSEQUAL expr .)
+    $end            reduce using rule 11 (expr -> expr LESSEQUAL expr .)
+    OD              reduce using rule 11 (expr -> expr LESSEQUAL expr .)
+    ELSE            reduce using rule 11 (expr -> expr LESSEQUAL expr .)
+    FI              reduce using rule 11 (expr -> expr LESSEQUAL expr .)
+    END             reduce using rule 11 (expr -> expr LESSEQUAL expr .)
+    LESSTHAN        shift and go to state 41
+    GREATERTHAN     shift and go to state 43
+    GREATEREQUAL    shift and go to state 39
+    LESSEQUAL       shift and go to state 44
+    EQUAL           shift and go to state 42
+    NOTEQUAL        shift and go to state 40
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+
+  ! LESSTHAN        [ reduce using rule 11 (expr -> expr LESSEQUAL expr .) ]
+  ! GREATERTHAN     [ reduce using rule 11 (expr -> expr LESSEQUAL expr .) ]
+  ! GREATEREQUAL    [ reduce using rule 11 (expr -> expr LESSEQUAL expr .) ]
+  ! LESSEQUAL       [ reduce using rule 11 (expr -> expr LESSEQUAL expr .) ]
+  ! EQUAL           [ reduce using rule 11 (expr -> expr LESSEQUAL expr .) ]
+  ! NOTEQUAL        [ reduce using rule 11 (expr -> expr LESSEQUAL expr .) ]
+  ! PLUS            [ reduce using rule 11 (expr -> expr LESSEQUAL expr .) ]
+  ! MINUS           [ reduce using rule 11 (expr -> expr LESSEQUAL expr .) ]
+
+
+state 65
+
+    (14) expr -> expr PLUS term .
+    (26) term -> term . TIMES fact
+
+    LESSTHAN        reduce using rule 14 (expr -> expr PLUS term .)
+    GREATERTHAN     reduce using rule 14 (expr -> expr PLUS term .)
+    GREATEREQUAL    reduce using rule 14 (expr -> expr PLUS term .)
+    LESSEQUAL       reduce using rule 14 (expr -> expr PLUS term .)
+    EQUAL           reduce using rule 14 (expr -> expr PLUS term .)
+    NOTEQUAL        reduce using rule 14 (expr -> expr PLUS term .)
+    PLUS            reduce using rule 14 (expr -> expr PLUS term .)
+    MINUS           reduce using rule 14 (expr -> expr PLUS term .)
+    DO              reduce using rule 14 (expr -> expr PLUS term .)
+    THEN            reduce using rule 14 (expr -> expr PLUS term .)
+    COMMA           reduce using rule 14 (expr -> expr PLUS term .)
+    RBRACKET        reduce using rule 14 (expr -> expr PLUS term .)
+    RPAREN          reduce using rule 14 (expr -> expr PLUS term .)
+    SEMICOLON       reduce using rule 14 (expr -> expr PLUS term .)
+    $end            reduce using rule 14 (expr -> expr PLUS term .)
+    OD              reduce using rule 14 (expr -> expr PLUS term .)
+    ELSE            reduce using rule 14 (expr -> expr PLUS term .)
+    FI              reduce using rule 14 (expr -> expr PLUS term .)
+    END             reduce using rule 14 (expr -> expr PLUS term .)
+    TIMES           shift and go to state 37
+
+
+state 66
+
+    (15) expr -> expr MINUS term .
+    (26) term -> term . TIMES fact
+
+    LESSTHAN        reduce using rule 15 (expr -> expr MINUS term .)
+    GREATERTHAN     reduce using rule 15 (expr -> expr MINUS term .)
+    GREATEREQUAL    reduce using rule 15 (expr -> expr MINUS term .)
+    LESSEQUAL       reduce using rule 15 (expr -> expr MINUS term .)
+    EQUAL           reduce using rule 15 (expr -> expr MINUS term .)
+    NOTEQUAL        reduce using rule 15 (expr -> expr MINUS term .)
+    PLUS            reduce using rule 15 (expr -> expr MINUS term .)
+    MINUS           reduce using rule 15 (expr -> expr MINUS term .)
+    DO              reduce using rule 15 (expr -> expr MINUS term .)
+    THEN            reduce using rule 15 (expr -> expr MINUS term .)
+    COMMA           reduce using rule 15 (expr -> expr MINUS term .)
+    RBRACKET        reduce using rule 15 (expr -> expr MINUS term .)
+    RPAREN          reduce using rule 15 (expr -> expr MINUS term .)
+    SEMICOLON       reduce using rule 15 (expr -> expr MINUS term .)
+    $end            reduce using rule 15 (expr -> expr MINUS term .)
+    OD              reduce using rule 15 (expr -> expr MINUS term .)
+    ELSE            reduce using rule 15 (expr -> expr MINUS term .)
+    FI              reduce using rule 15 (expr -> expr MINUS term .)
+    END             reduce using rule 15 (expr -> expr MINUS term .)
+    TIMES           shift and go to state 37
+
+
+state 67
+
+    (35) define_stmt -> DEFINE IDENT PROC LPAREN . param_list RPAREN stmt_list END
+    (36) param_list -> . IDENT COMMA param_list
+    (37) param_list -> . IDENT
+
+    IDENT           shift and go to state 73
+
+    param_list                     shift and go to state 74
+
+state 68
+
+    (34) if_stmt -> IF expr THEN stmt_list . ELSE stmt_list FI
+
+    ELSE            shift and go to state 75
+
+
+state 69
+
+    (21) list_stuff -> CONS expr COMMA expr .
+    (8) expr -> expr . LESSTHAN expr
+    (9) expr -> expr . GREATERTHAN expr
+    (10) expr -> expr . GREATEREQUAL expr
+    (11) expr -> expr . LESSEQUAL expr
+    (12) expr -> expr . EQUAL expr
+    (13) expr -> expr . NOTEQUAL expr
+    (14) expr -> expr . PLUS term
+    (15) expr -> expr . MINUS term
+
+  ! shift/reduce conflict for LESSTHAN resolved as shift
+  ! shift/reduce conflict for GREATERTHAN resolved as shift
+  ! shift/reduce conflict for GREATEREQUAL resolved as shift
+  ! shift/reduce conflict for LESSEQUAL resolved as shift
+  ! shift/reduce conflict for EQUAL resolved as shift
+  ! shift/reduce conflict for NOTEQUAL resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+    DO              reduce using rule 21 (list_stuff -> CONS expr COMMA expr .)
+    THEN            reduce using rule 21 (list_stuff -> CONS expr COMMA expr .)
+    COMMA           reduce using rule 21 (list_stuff -> CONS expr COMMA expr .)
+    RBRACKET        reduce using rule 21 (list_stuff -> CONS expr COMMA expr .)
+    RPAREN          reduce using rule 21 (list_stuff -> CONS expr COMMA expr .)
+    SEMICOLON       reduce using rule 21 (list_stuff -> CONS expr COMMA expr .)
+    $end            reduce using rule 21 (list_stuff -> CONS expr COMMA expr .)
+    OD              reduce using rule 21 (list_stuff -> CONS expr COMMA expr .)
+    ELSE            reduce using rule 21 (list_stuff -> CONS expr COMMA expr .)
+    FI              reduce using rule 21 (list_stuff -> CONS expr COMMA expr .)
+    END             reduce using rule 21 (list_stuff -> CONS expr COMMA expr .)
+    LESSTHAN        shift and go to state 41
+    GREATERTHAN     shift and go to state 43
+    GREATEREQUAL    shift and go to state 39
+    LESSEQUAL       shift and go to state 44
+    EQUAL           shift and go to state 42
+    NOTEQUAL        shift and go to state 40
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+
+  ! LESSTHAN        [ reduce using rule 21 (list_stuff -> CONS expr COMMA expr .) ]
+  ! GREATERTHAN     [ reduce using rule 21 (list_stuff -> CONS expr COMMA expr .) ]
+  ! GREATEREQUAL    [ reduce using rule 21 (list_stuff -> CONS expr COMMA expr .) ]
+  ! LESSEQUAL       [ reduce using rule 21 (list_stuff -> CONS expr COMMA expr .) ]
+  ! EQUAL           [ reduce using rule 21 (list_stuff -> CONS expr COMMA expr .) ]
+  ! NOTEQUAL        [ reduce using rule 21 (list_stuff -> CONS expr COMMA expr .) ]
+  ! PLUS            [ reduce using rule 21 (list_stuff -> CONS expr COMMA expr .) ]
+  ! MINUS           [ reduce using rule 21 (list_stuff -> CONS expr COMMA expr .) ]
+
+
+state 70
+
+    (23) expr_list -> expr COMMA expr_list .
+
+    RBRACKET        reduce using rule 23 (expr_list -> expr COMMA expr_list .)
+    RPAREN          reduce using rule 23 (expr_list -> expr COMMA expr_list .)
+
+
+state 71
+
+    (38) func_call -> IDENT LPAREN expr_list RPAREN .
+
+    TIMES           reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    DO              reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    LESSTHAN        reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    GREATERTHAN     reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    GREATEREQUAL    reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    LESSEQUAL       reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    EQUAL           reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    NOTEQUAL        reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    PLUS            reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    MINUS           reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    THEN            reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    COMMA           reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    RBRACKET        reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    RPAREN          reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    SEMICOLON       reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    $end            reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    OD              reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    ELSE            reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    FI              reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    END             reduce using rule 38 (func_call -> IDENT LPAREN expr_list RPAREN .)
+
+
+state 72
+
+    (33) while_stmt -> WHILE expr DO stmt_list OD .
+
+    SEMICOLON       reduce using rule 33 (while_stmt -> WHILE expr DO stmt_list OD .)
+    OD              reduce using rule 33 (while_stmt -> WHILE expr DO stmt_list OD .)
+    END             reduce using rule 33 (while_stmt -> WHILE expr DO stmt_list OD .)
+    $end            reduce using rule 33 (while_stmt -> WHILE expr DO stmt_list OD .)
+    ELSE            reduce using rule 33 (while_stmt -> WHILE expr DO stmt_list OD .)
+    FI              reduce using rule 33 (while_stmt -> WHILE expr DO stmt_list OD .)
+
+
+state 73
+
+    (36) param_list -> IDENT . COMMA param_list
+    (37) param_list -> IDENT .
+
+    COMMA           shift and go to state 76
+    RPAREN          reduce using rule 37 (param_list -> IDENT .)
+
+
+state 74
+
+    (35) define_stmt -> DEFINE IDENT PROC LPAREN param_list . RPAREN stmt_list END
+
+    RPAREN          shift and go to state 77
+
+
+state 75
+
+    (34) if_stmt -> IF expr THEN stmt_list ELSE . stmt_list FI
+    (2) stmt_list -> . stmt SEMICOLON stmt_list
+    (3) stmt_list -> . stmt
+    (4) stmt -> . assign_stmt
+    (5) stmt -> . while_stmt
+    (6) stmt -> . if_stmt
+    (7) stmt -> . define_stmt
+    (32) assign_stmt -> . IDENT ASSIGNOP expr
+    (33) while_stmt -> . WHILE expr DO stmt_list OD
+    (34) if_stmt -> . IF expr THEN stmt_list ELSE stmt_list FI
+    (35) define_stmt -> . DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END
+
+    IDENT           shift and go to state 6
+    WHILE           shift and go to state 1
+    IF              shift and go to state 8
+    DEFINE          shift and go to state 5
+
+    stmt_list                      shift and go to state 78
+    if_stmt                        shift and go to state 10
+    define_stmt                    shift and go to state 2
+    stmt                           shift and go to state 7
+    assign_stmt                    shift and go to state 3
+    while_stmt                     shift and go to state 11
+
+state 76
+
+    (36) param_list -> IDENT COMMA . param_list
+    (36) param_list -> . IDENT COMMA param_list
+    (37) param_list -> . IDENT
+
+    IDENT           shift and go to state 73
+
+    param_list                     shift and go to state 79
+
+state 77
+
+    (35) define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN . stmt_list END
+    (2) stmt_list -> . stmt SEMICOLON stmt_list
+    (3) stmt_list -> . stmt
+    (4) stmt -> . assign_stmt
+    (5) stmt -> . while_stmt
+    (6) stmt -> . if_stmt
+    (7) stmt -> . define_stmt
+    (32) assign_stmt -> . IDENT ASSIGNOP expr
+    (33) while_stmt -> . WHILE expr DO stmt_list OD
+    (34) if_stmt -> . IF expr THEN stmt_list ELSE stmt_list FI
+    (35) define_stmt -> . DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END
+
+    IDENT           shift and go to state 6
+    WHILE           shift and go to state 1
+    IF              shift and go to state 8
+    DEFINE          shift and go to state 5
+
+    stmt_list                      shift and go to state 80
+    if_stmt                        shift and go to state 10
+    define_stmt                    shift and go to state 2
+    stmt                           shift and go to state 7
+    assign_stmt                    shift and go to state 3
+    while_stmt                     shift and go to state 11
+
+state 78
+
+    (34) if_stmt -> IF expr THEN stmt_list ELSE stmt_list . FI
+
+    FI              shift and go to state 81
+
+
+state 79
+
+    (36) param_list -> IDENT COMMA param_list .
+
+    RPAREN          reduce using rule 36 (param_list -> IDENT COMMA param_list .)
+
+
+state 80
+
+    (35) define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list . END
+
+    END             shift and go to state 82
+
+
+state 81
+
+    (34) if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .
+
+    SEMICOLON       reduce using rule 34 (if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .)
+    END             reduce using rule 34 (if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .)
+    FI              reduce using rule 34 (if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .)
+    ELSE            reduce using rule 34 (if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .)
+    OD              reduce using rule 34 (if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .)
+    $end            reduce using rule 34 (if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .)
+
+
+state 82
+
+    (35) define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END .
+
+    SEMICOLON       reduce using rule 35 (define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END .)
+    ELSE            reduce using rule 35 (define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END .)
+    FI              reduce using rule 35 (define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END .)
+    $end            reduce using rule 35 (define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END .)
+    OD              reduce using rule 35 (define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END .)
+    END             reduce using rule 35 (define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for LESSTHAN in state 30 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHAN in state 30 resolved as shift
+WARNING: shift/reduce conflict for GREATEREQUAL in state 30 resolved as shift
+WARNING: shift/reduce conflict for LESSEQUAL in state 30 resolved as shift
+WARNING: shift/reduce conflict for EQUAL in state 30 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUAL in state 30 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 30 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 30 resolved as shift
+WARNING: shift/reduce conflict for LESSTHAN in state 34 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHAN in state 34 resolved as shift
+WARNING: shift/reduce conflict for GREATEREQUAL in state 34 resolved as shift
+WARNING: shift/reduce conflict for LESSEQUAL in state 34 resolved as shift
+WARNING: shift/reduce conflict for EQUAL in state 34 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUAL in state 34 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 34 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 34 resolved as shift
+WARNING: shift/reduce conflict for LESSTHAN in state 47 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHAN in state 47 resolved as shift
+WARNING: shift/reduce conflict for GREATEREQUAL in state 47 resolved as shift
+WARNING: shift/reduce conflict for LESSEQUAL in state 47 resolved as shift
+WARNING: shift/reduce conflict for EQUAL in state 47 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUAL in state 47 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 47 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 47 resolved as shift
+WARNING: shift/reduce conflict for LESSTHAN in state 59 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHAN in state 59 resolved as shift
+WARNING: shift/reduce conflict for GREATEREQUAL in state 59 resolved as shift
+WARNING: shift/reduce conflict for LESSEQUAL in state 59 resolved as shift
+WARNING: shift/reduce conflict for EQUAL in state 59 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUAL in state 59 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 59 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 59 resolved as shift
+WARNING: shift/reduce conflict for LESSTHAN in state 60 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHAN in state 60 resolved as shift
+WARNING: shift/reduce conflict for GREATEREQUAL in state 60 resolved as shift
+WARNING: shift/reduce conflict for LESSEQUAL in state 60 resolved as shift
+WARNING: shift/reduce conflict for EQUAL in state 60 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUAL in state 60 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 60 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 60 resolved as shift
+WARNING: shift/reduce conflict for LESSTHAN in state 61 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHAN in state 61 resolved as shift
+WARNING: shift/reduce conflict for GREATEREQUAL in state 61 resolved as shift
+WARNING: shift/reduce conflict for LESSEQUAL in state 61 resolved as shift
+WARNING: shift/reduce conflict for EQUAL in state 61 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUAL in state 61 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 61 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 61 resolved as shift
+WARNING: shift/reduce conflict for LESSTHAN in state 62 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHAN in state 62 resolved as shift
+WARNING: shift/reduce conflict for GREATEREQUAL in state 62 resolved as shift
+WARNING: shift/reduce conflict for LESSEQUAL in state 62 resolved as shift
+WARNING: shift/reduce conflict for EQUAL in state 62 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUAL in state 62 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 62 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 62 resolved as shift
+WARNING: shift/reduce conflict for LESSTHAN in state 63 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHAN in state 63 resolved as shift
+WARNING: shift/reduce conflict for GREATEREQUAL in state 63 resolved as shift
+WARNING: shift/reduce conflict for LESSEQUAL in state 63 resolved as shift
+WARNING: shift/reduce conflict for EQUAL in state 63 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUAL in state 63 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 63 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 63 resolved as shift
+WARNING: shift/reduce conflict for LESSTHAN in state 64 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHAN in state 64 resolved as shift
+WARNING: shift/reduce conflict for GREATEREQUAL in state 64 resolved as shift
+WARNING: shift/reduce conflict for LESSEQUAL in state 64 resolved as shift
+WARNING: shift/reduce conflict for EQUAL in state 64 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUAL in state 64 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 64 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 64 resolved as shift
+WARNING: shift/reduce conflict for LESSTHAN in state 69 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHAN in state 69 resolved as shift
+WARNING: shift/reduce conflict for GREATEREQUAL in state 69 resolved as shift
+WARNING: shift/reduce conflict for LESSEQUAL in state 69 resolved as shift
+WARNING: shift/reduce conflict for EQUAL in state 69 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUAL in state 69 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 69 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 69 resolved as shift
