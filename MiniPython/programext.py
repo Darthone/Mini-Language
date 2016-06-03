@@ -47,6 +47,7 @@
 #
 
 import sys
+import math
 
 ####  CONSTANTS   ################
 
@@ -483,6 +484,24 @@ class ForStmt( Stmt ) :
         self.inc.display( nt, ft, depth+1 )
         print "%sDO" % (tabstop*depth)
         self.body.display( nt, ft, depth+1 )
+
+class Pow( Expr ) :
+    '''expression for sending to a power'''
+
+    def __init__( self, root, power ) :
+        '''root, power are Expr's, the operands'''
+
+        self.root = root
+        self.power = power
+    
+    def eval( self, nt, ft ) :
+        return math.pow(self.root.eval( nt, ft ), self.power.eval( nt, ft ))
+
+    def display( self, nt, ft, depth=0 ) :
+        print "%s^" % (tabstop*depth)
+        self.power.display( nt, ft, depth+1 )
+        self.root.display( nt, ft, depth+1 )
+        #print "%s= %i" % (tabstop*depth, self.eval( nt, ft ))
 
 #-------------------------------------------------------
 

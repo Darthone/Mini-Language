@@ -48,6 +48,7 @@ tokens = (
     'END',
     'IDENT',
     'FOR',
+    'POW',
         'LESSTHAN',
         'GREATERTHAN',
         'GREATEREQUAL',
@@ -91,6 +92,7 @@ t_ignore = ' \t'
 t_PLUS      = r'\+'
 t_MINUS   = r'-'
 t_TIMES     = r'\*'
+t_POW     = r'\^'
 t_LPAREN    = r'\('
 t_RPAREN    = r'\)'
 t_ASSIGNOP = r':='
@@ -277,6 +279,10 @@ def p_while( p ) :
 def p_for( p ) :
     'for_stmt : FOR assign_stmt SEMICOLON expr SEMICOLON assign_stmt DO stmt_list OD'
     p[0] = ForStmt( p[2], p[4], p[6], p[8])
+
+def p_pow( p ) :
+    '''term : term POW fact'''
+    p[0] = Pow( p[1], p[3] )
 
 def p_if( p ) :
     'if_stmt : IF expr THEN stmt_list ELSE stmt_list FI'
