@@ -1,8 +1,8 @@
 #!/usr/bin/python
 #
 # interpreterext.py - 
-#		A python implementation of the mini language, with user-defined
-#		functions
+#       A python implementation of the mini language, with user-defined
+#       functions
 #
 # Kurt Schmidt
 # 7/07
@@ -10,10 +10,10 @@
 # EDITOR:  cols=80, tabstop=2
 #
 # NOTES:
-#		the display() method everybody has is just to graphically spit the
-#		actual parse tree to the screen
+#       the display() method everybody has is just to graphically spit the
+#       actual parse tree to the screen
 #
-#		The grammar can be found in programext.py  (probably should be here)
+#       The grammar can be found in programext.py  (probably should be here)
 #
 #
 
@@ -27,26 +27,27 @@ from programext import *
 from ply import lex
 
 tokens = (
-	'PLUS',
-	'MINUS',
-	'TIMES',
-	'LPAREN',
-	'RPAREN',
-	'SEMICOLON',
-	'COMMA',
-	'NUMBER',
-	'ASSIGNOP',
-	'WHILE',
-	'DO',
-	'OD',
-	'IF',
-	'THEN',
-	'ELSE',
-	'FI',
-	'DEFINE',
-	'PROC',
-	'END',
-	'IDENT',
+    'PLUS',
+    'MINUS',
+    'TIMES',
+    'LPAREN',
+    'RPAREN',
+    'SEMICOLON',
+    'COMMA',
+    'NUMBER',
+    'ASSIGNOP',
+    'WHILE',
+    'DO',
+    'OD',
+    'IF',
+    'THEN',
+    'ELSE',
+    'FI',
+    'DEFINE',
+    'PROC',
+    'END',
+    'IDENT',
+    'FOR',
         'LESSTHAN',
         'GREATERTHAN',
         'GREATEREQUAL',
@@ -61,39 +62,40 @@ tokens = (
         'NULL'
 )
 
-	# These are all caught in the IDENT rule, typed there.
+    # These are all caught in the IDENT rule, typed there.
 reserved = {
-		'while' : 'WHILE',
-		'do'		: 'DO',
-		'od'		: 'OD',
-		'if'		: 'IF',
-		'then'	: 'THEN',
-		'else'	: 'ELSE',
-		'fi'		: 'FI',
-		'define': 'DEFINE',
-		'proc'	: 'PROC',
-		'end'		: 'END',
+        'while' : 'WHILE',
+        'for' : 'FOR',
+        'do'        : 'DO',
+        'od'        : 'OD',
+        'if'        : 'IF',
+        'then'  : 'THEN',
+        'else'  : 'ELSE',
+        'fi'        : 'FI',
+        'define': 'DEFINE',
+        'proc'  : 'PROC',
+        'end'       : 'END',
                 'car'   : 'CAR',
                 'cdr'   : 'CDR',
                 'cons'  : 'CONS',
                 'null'  : 'NULL'
-		}
+        }
 
 # Now, this section.  We have a mapping, REs to token types (please note
 # the t_ prefix).  They simply return the type.
 
-	# t_ignore is special, and does just what it says.  Spaces and tabs
+    # t_ignore is special, and does just what it says.  Spaces and tabs
 t_ignore = ' \t'
 
-	# These are the simple maps
-t_PLUS		= r'\+'
+    # These are the simple maps
+t_PLUS      = r'\+'
 t_MINUS   = r'-'
-t_TIMES		= r'\*'
-t_LPAREN	= r'\('
-t_RPAREN	= r'\)'
+t_TIMES     = r'\*'
+t_LPAREN    = r'\('
+t_RPAREN    = r'\)'
 t_ASSIGNOP = r':='
 t_SEMICOLON = r';'
-t_COMMA		= r','
+t_COMMA     = r','
 t_LESSTHAN = r'<'
 t_GREATERTHAN = r'>'
 t_GREATEREQUAL = r'>='
@@ -104,19 +106,19 @@ t_LBRACKET = r'\['
 t_RBRACKET = r'\]'
 
 def t_IDENT( t ):
-	#r'[a-zA-Z_][a-zA-Z_0-9]*'
-	r'[a-z]+'
-	t.type = reserved.get( t.value, 'IDENT' )    # Check for reserved words
-	return t
+    #r'[a-zA-Z_][a-zA-Z_0-9]*'
+    r'[a-z]+'
+    t.type = reserved.get( t.value, 'IDENT' )    # Check for reserved words
+    return t
 
 def t_NUMBER( t ) :
-	r'[0-9]+'
+    r'[0-9]+'
 
-		# t.value holds the string that matched.  Dynamic typing - no unions
-	t.value = int( t.value )
-	return t
+        # t.value holds the string that matched.  Dynamic typing - no unions
+    t.value = int( t.value )
+    return t
 
-	# These are standard little ditties:
+    # These are standard little ditties:
 def t_newline( t ):
   r'\n+'
   t.lexer.lineno += len( t.value )
@@ -136,8 +138,8 @@ lex.lex()
 
 import ply.yacc as yacc
 
-	# create a function for each production (note the prefix)
-	# The rule is given in the doc string
+    # create a function for each production (note the prefix)
+    # The rule is given in the doc string
 
 def p_program( p ) :
   'program : stmt_list'
@@ -158,11 +160,12 @@ def p_stmt_list( p ) :
    p[0] = p[3]
 
 def p_stmt( p ) :
-	'''stmt : assign_stmt
-				| while_stmt
-				| if_stmt
-				| define_stmt'''
-	p[0] = p[1]
+    '''stmt : assign_stmt
+                | while_stmt
+                | for_stmt
+                | if_stmt
+                | define_stmt'''
+    p[0] = p[1]
 
 def p_lessthan (p) :
     'expr : expr LESSTHAN expr'
@@ -189,12 +192,12 @@ def p_notequal (p) :
     p[0] = NotEqual( p[1], p[3] )
 
 def p_add( p ) :
-	'expr : expr PLUS term'
-	p[0] = Plus( p[1], p[3] )
+    'expr : expr PLUS term'
+    p[0] = Plus( p[1], p[3] )
 
 def p_sub( p ) :
-	'expr : expr MINUS term'
-	p[0] = Minus( p[1], p[3] )
+    'expr : expr MINUS term'
+    p[0] = Minus( p[1], p[3] )
 
 #PLACE LIST STUFF HERE
 
@@ -236,44 +239,48 @@ def p_expr_list( p ) :
     p[0] = p[3]
 
 def p_expr_term( p ) :
-	'expr : term'
-	p[0] = p[1]
+    'expr : term'
+    p[0] = p[1]
 
 def p_mult( p ) :
-	'''term : term TIMES fact'''
-	p[0] = Times( p[1], p[3] )
+    '''term : term TIMES fact'''
+    p[0] = Times( p[1], p[3] )
 
 def p_term_fact( p ) :
-	'term : fact'
-	p[0] = p[1]
+    'term : fact'
+    p[0] = p[1]
 
 def p_fact_expr( p ) :
-	'fact : LPAREN expr RPAREN'
-	p[0] = p[2]
+    'fact : LPAREN expr RPAREN'
+    p[0] = p[2]
 
 def p_fact_NUM( p ) :
-	'fact : NUMBER'
-	p[0] = Number( p[1] )
+    'fact : NUMBER'
+    p[0] = Number( p[1] )
 
 def p_fact_IDENT( p ) :
-	'fact : IDENT'
-	p[0] = Ident( p[1] )
+    'fact : IDENT'
+    p[0] = Ident( p[1] )
 
 def p_fact_funcall( p ) :
-	'fact : func_call'
-	p[0] = p[1]
+    'fact : func_call'
+    p[0] = p[1]
 
 def p_assn( p ) :
-	'assign_stmt : IDENT ASSIGNOP expr'
-	p[0] = AssignStmt( p[1], p[3] )
+    'assign_stmt : IDENT ASSIGNOP expr'
+    p[0] = AssignStmt( p[1], p[3] )
 
 def p_while( p ) :
-	'while_stmt : WHILE expr DO stmt_list OD'
-	p[0] = WhileStmt( p[2], p[4] )
+    'while_stmt : WHILE expr DO stmt_list OD'
+    p[0] = WhileStmt( p[2], p[4] )
+
+def p_for( p ) :
+    'for_stmt : FOR assign_stmt SEMICOLON expr SEMICOLON assign_stmt DO stmt_list OD'
+    p[0] = ForStmt( p[2], p[4], p[6], p[8])
 
 def p_if( p ) :
-	'if_stmt : IF expr THEN stmt_list ELSE stmt_list FI'
-	p[0] = IfStmt( p[2], p[4], p[6] )
+    'if_stmt : IF expr THEN stmt_list ELSE stmt_list FI'
+    p[0] = IfStmt( p[2], p[4], p[6] )
 
 def p_def( p ) :
   'define_stmt : DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END'
@@ -295,10 +302,10 @@ def p_func_call( p ) :
 
 # Error rule for syntax errors
 def p_error( p ):
-	print "Syntax error in input!", str( p )
-	sys.exit( 2 )
+    print "Syntax error in input!", str( p )
+    sys.exit( 2 )
 
-	# now, build the parser
+    # now, build the parser
 yacc.yacc()
 
 
@@ -306,48 +313,48 @@ yacc.yacc()
 
 def test_scanner( arg=sys.argv ) :
 
-	data = ' 1+2 1-2 3*4 x blah y := 5 '
+    data = ' 1+2 1-2 3*4 x blah y := 5 '
 
-	lex.input( data )
+    lex.input( data )
 
-	# attempt to get that first token
-	tok = lex.token()
-	while tok :
-		print tok
-		tok = lex.token()
+    # attempt to get that first token
+    tok = lex.token()
+    while tok :
+        print tok
+        tok = lex.token()
 
 
 def test_parser( arg=sys.argv ) :
 
-	#data = ( '2', '232', '98237492' )
-	#data = [ '2+4', '2-4', '2*37' ]
-	#data.extend( [ 'x', 'foo', 'sof' ] )
-	#data = '''x:=3; s:=0; while x do s := s+x ; x := x-1 od'''
-	#data = '''x := 12;
-	#	if x then
-	#		y := 13
-	#	else
-	#		y := 0
-	#	fi'''
+    #data = ( '2', '232', '98237492' )
+    #data = [ '2+4', '2-4', '2*37' ]
+    #data.extend( [ 'x', 'foo', 'sof' ] )
+    #data = '''x:=3; s:=0; while x do s := s+x ; x := x-1 od'''
+    #data = '''x := 12;
+    #   if x then
+    #       y := 13
+    #   else
+    #       y := 0
+    #   fi'''
 
-	#data = 'if 5 then x := 13 else x:=0 fi'
+    #data = 'if 5 then x := 13 else x:=0 fi'
 
-#	data = '''
-#	define sum ( i )
-#	proc
-#	  return := 0;
-#		while i do
-#			return := return + i;
-#			i := i - 1
-#		od
-#	done;
-#	x := 5;
-#	sum( x )'''
+#   data = '''
+#   define sum ( i )
+#   proc
+#     return := 0;
+#       while i do
+#           return := return + i;
+#           i := i - 1
+#       od
+#   done;
+#   x := 5;
+#   sum( x )'''
 
-	data = sys.stdin.read()
+    data = sys.stdin.read()
 
-	yacc.parse( data )
+    yacc.parse( data )
 
 
 if __name__ == '__main__' :
-	test_parser()
+    test_parser()
