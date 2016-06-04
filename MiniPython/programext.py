@@ -460,10 +460,10 @@ class Elifstmt( Stmt ) :
 			self.fBody.eval( nt, ft)
 	def display( self, nt, ft, depth=0 ) :
 		print "%sELIF" % (tabstop*depth)
-     		self.cond.display( nt, ft, depth+1) 
+		self.cond.display( nt, ft, depth+1) 
 		print "%sTHEN" % (tabstop*depth)
-        	self.tBody.display( nt, ft, depth+1 )
-			self.fBody.display( nt, ft, depth+1 )
+		self.tBody.display( nt, ft, depth+1 )
+		self.fBody.display( nt, ft, depth+1 )
 
 
 class WhileStmt( Stmt ) :
