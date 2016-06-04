@@ -43,6 +43,7 @@ tokens = (
     'THEN',
     'ELSE',
     'FI',
+	'ELIF',
     'DEFINE',
     'PROC',
     'END',
@@ -73,6 +74,7 @@ reserved = {
         'then'  : 'THEN',
         'else'  : 'ELSE',
         'fi'        : 'FI',
+		'elif'	:	'ELIF',
         'define': 'DEFINE',
         'proc'  : 'PROC',
         'end'       : 'END',
@@ -285,8 +287,16 @@ def p_pow( p ) :
     p[0] = Pow( p[1], p[3] )
 
 def p_if( p ) :
-    'if_stmt : IF expr THEN stmt_list ELSE stmt_list FI'
-    p[0] = IfStmt( p[2], p[4], p[6] )
+    'if_stmt : IF expr THEN stmt_list elif_stmt ELSE stmt_list FI'
+    p[0] = IfStmt( p[2], p[4], p[7] )
+
+def p_elif( p ) :
+	'''elif_stmt :
+            | ELIF expr THEN stmt_list elif_stmt'''
+        if len ( p ) == 0 :
+            p[0] = p[0]
+        else :
+            p[0] = Elifstmt( p[2], p[4], p[5] )
 
 def p_def( p ) :
   'define_stmt : DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END'
