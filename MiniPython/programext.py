@@ -450,8 +450,8 @@ class Elifstmt( Stmt ) :
 	
 	def __init__( self, cond, tBody, fBody) :
 		self.cond = cond
-		self.body = tBody
-		self.recur = fBody
+		self.tBody = tBody
+		self.fBody = fBody
 
 	def eval( self, nt, ft ) :
 		if self.cond.eval( nt, ft ) > 0 :
@@ -463,7 +463,7 @@ class Elifstmt( Stmt ) :
      		self.cond.display( nt, ft, depth+1) 
 		print "%sTHEN" % (tabstop*depth)
         	self.tBody.display( nt, ft, depth+1 )
-		self.fBody.display( nt, ft, depth+1 )
+			self.fBody.display( nt, ft, depth+1 )
 
 
 class WhileStmt( Stmt ) :
