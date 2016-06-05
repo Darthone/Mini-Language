@@ -43,6 +43,7 @@ tokens = (
     'THEN',
     'ELSE',
     'FI',
+	'ELIF',
     'DEFINE',
     'PROC',
     'END',
@@ -76,6 +77,7 @@ reserved = {
         'then'  : 'THEN',
         'else'  : 'ELSE',
         'fi'    : 'FI',
+		'elif'	:	'ELIF',
         'define': 'DEFINE',
         'proc'  : 'PROC',
         'end'   : 'END',
@@ -159,8 +161,8 @@ def p_program( p ) :
 
 def p_stmt_list( p ) :
  '''stmt_list : stmt SEMICOLON stmt_list
-       | stmt'''
- if len( p ) == 2 :  # single stmt => new list
+       | stmt SEMICOLON'''
+ if len( p ) == 3 :  # single stmt => new list
    p[0] = StmtList()
    p[0].insert( p[1] )
  else :  # we have a stmtList, keep adding to front
@@ -276,11 +278,11 @@ def p_fact_funcall( p ) :
     'fact : func_call'
     p[0] = p[1]
 
-def p_class_fact_funcall( p ) :
+def p_fact_class_funcall( p ) :
     'fact : class_func_call'
     p[0] = p[1]
 
-def p_class_member( p ) :
+def p_fact_class_member( p ) :
     'fact : class_member'
     p[0] = p[1]
 
@@ -298,27 +300,35 @@ def p_for( p ) :
 
 def p_pow( p ) :
     '''term : term POW fact'''
-    p[0] = Pow( p[1], p[3] )
+    p[0] = Pow( p[1], p[3])
 
 def p_class( p ) :
     'class_stmt : CLASS IDENT LPAREN param_list RPAREN stmt_list END'
     p[0] = ClassStmt(p[2], p[4], p[6])
 
-def p_class( p ) :
+def p_class_inherit( p ) :
     'class_inherit_stmt : CLASS IDENT LPAREN param_list RPAREN  COLON IDENT stmt_list END'
     p[0] = ClassInheritStmt(p[2], p[4], p[6]) // TODO
 
 def p_class_member( p ):
     'class_member : IDENT PERIOD IDENT'
-    p[0] = ClassMem(p[2], p[4], p[6])
+    p[0] = ClassMem(p[1], p[3])
 
 def p_class_function_call( p ):
-    'class_func_call : IDENT PERIOD funcall'
+    'class_func_call : IDENT PERIOD IDENT LPAREN expr_list RPAREN'
     p[0] = ClassFunCall( p[1], p[3] )
 
 def p_if( p ) :
-    'if_stmt : IF expr THEN stmt_list ELSE stmt_list FI'
-    p[0] = IfStmt( p[2], p[4], p[6] )
+    'if_stmt : IF expr THEN stmt_list elif_stmt ELSE stmt_list FI'
+    p[0] = IfStmt( p[2], p[4], p[7] )
+
+def p_elif( p ) :
+	'''elif_stmt :
+            | ELIF expr THEN stmt_list elif_stmt'''
+        if len ( p ) == 0 :
+            p[0] = p[0]
+        else :
+            p[0] = Elifstmt( p[2], p[4], p[5] )
 
 def p_def( p ) :
   'define_stmt : DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END'
@@ -383,11 +393,11 @@ def test_parser( arg=sys.argv ) :
 #     return := 0;
 #       while i do
 #           return := return + i;
-#           i := i - 1
+#           i := i - 1;
 #       od
 #   done;
 #   x := 5;
-#   sum( x )'''
+#   sum( x );'''
 
     data = sys.stdin.read()
 
@@ -396,3 +406,4 @@ def test_parser( arg=sys.argv ) :
 
 if __name__ == '__main__' :
     test_parser()
+

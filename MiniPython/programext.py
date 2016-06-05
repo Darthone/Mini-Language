@@ -33,6 +33,8 @@
 #       define_stmt: DEFINE IDENT PROC '(' param_list ')' stmt_list END
 #       if_stmt: IF expr THEN stmt_list ELSE stmt_list FI
 #       for_stmt: FOR assign_stmt ';' expr  ';' assign_stmt DO stmt_list OD
+#       class_stmt: CLASS IDENT '(' param_list ')' stmt_list END
+#       class_inherit_stmt: CLASS IDENT '(' param_list ')' ':' IDENT stmt_list END
 #       while_stmt: WHILE expr DO stmt_list OD
 #       param_list: IDENT ',' param_list 
 #           |      IDENT 
@@ -450,6 +452,25 @@ class IfStmt( Stmt ) :
         print "%sELSE" % (tabstop*depth)
         self.fBody.display( nt, ft, ct, depth+1 )
 
+class Elifstmt( Stmt ) :
+	
+	def __init__( self, cond, tBody, fBody) :
+		self.cond = cond
+		self.tBody = tBody
+		self.fBody = fBody
+
+	def eval( self, nt, ft ) :
+		if self.cond.eval( nt, ft ) > 0 :
+			self.tBody.eval( nt, ft )
+		else:
+			self.fBody.eval( nt, ft)
+	def display( self, nt, ft, depth=0 ) :
+		print "%sELIF" % (tabstop*depth)
+		self.cond.display( nt, ft, depth+1) 
+		print "%sTHEN" % (tabstop*depth)
+		self.tBody.display( nt, ft, depth+1 )
+		self.fBody.display( nt, ft, depth+1 )
+
 
 class WhileStmt( Stmt ) :
 
@@ -493,8 +514,12 @@ class ForStmt( Stmt ) :
 class ClassStmt( Stmt ):
     def __init__(self, ident, paramList, body):
         self.name = ident
+        self.paramList = paramList
+        self.body = body
+
     def eval( self, nt, ft, ct ) :
-        ft[ self.name ] = self.proc
+        ct[ self.name ] = self.body
+
     def display(self, nt, ft, ct):
         pass
 
@@ -570,9 +595,10 @@ class Program :
         self.stmtList = stmtList
         self.nameTable = {}
         self.funcTable = {}
+        self.classTable = {}
     
     def eval( self ) :
-        self.stmtList.eval( self.nameTable, self.funcTable )
+        self.stmtList.eval( self.nameTable, self.funcTable, self.classTable )
     
     def dump( self ) :
         print "Dump of Symbol Table"
@@ -585,7 +611,7 @@ class Program :
 
     def display( self, depth=0 ) :
         print "%sPROGRAM :" % (tabstop*depth)
-        self.stmtList.display( self.nameTable, self.funcTable )
+        self.stmtList.display( self.nameTable, self.funcTable, self.classTable )
 
 
 n = Plus( Number(17), Number(25) )
