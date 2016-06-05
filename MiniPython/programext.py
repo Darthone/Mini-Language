@@ -606,6 +606,9 @@ class Class:
         self.body.eval( newContext, ftContext, ct)
         return (newContext, ftContext);
 
+    def __str__(self):
+        return "Args: (%s) Body: { %s }" % (", ".join(self.paramList), self.body)
+
 
 
 class StmtList :
@@ -693,6 +696,10 @@ class Program :
         print "Function Table"
         for k in self.funcTable :
             print "  %s" % str(k)
+        print "Class Table"
+        for k,v in self.classTable.items():
+            print "  %s -> %s" % (str(k), str(v))
+
 
     def display( self, depth=0 ) :
         print "%sPROGRAM :" % (tabstop*depth)
