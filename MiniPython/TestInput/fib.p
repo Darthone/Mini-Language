@@ -8,8 +8,9 @@ define fib proc( n )
     a := t;
     i := i+1
   od;
-  return := a
+  return := a;
 end;
 
 n := 30;
-answer := fib( n )
+answer := fib( n );
+

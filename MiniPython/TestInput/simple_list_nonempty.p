@@ -4,4 +4,4 @@ c := cdr a;
 d := [];
 e := null d;
 f := null a;
-g := cons 10 a
+g := cons 10 a;

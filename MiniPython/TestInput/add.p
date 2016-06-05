@@ -3,14 +3,14 @@ proc(n)
   i := n;
   s := 0;
   while i do s := s + i;  i := i-1 od;
-  return := s
+  return := s;
 end;
 
 x := 5;
 if x then
-  s := add(x)
+  s := add(x);
 else
   x := 0 - x ;
-  s := add( x )
-fi
+  s := add( x );
+fi;
 
