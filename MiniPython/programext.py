@@ -25,10 +25,14 @@
 #       stmt:  assign_stmt 
 #           |  define_stmt 
 #           |  if_stmt 
+#           |  for_stmt 
+#           |  class_stmt 
+#           |  class_inherit_stmt 
 #           |  while_stmt 
 #       assign_stmt: IDENT ASSIGNOP expr
 #       define_stmt: DEFINE IDENT PROC '(' param_list ')' stmt_list END
 #       if_stmt: IF expr THEN stmt_list ELSE stmt_list FI
+#       for_stmt: FOR assign_stmt ';' expr  ';' assign_stmt DO stmt_list OD
 #       while_stmt: WHILE expr DO stmt_list OD
 #       param_list: IDENT ',' param_list 
 #           |      IDENT 
@@ -36,6 +40,7 @@
 #           | expr '-' term   
 #           | term            
 #       term: term '*' factor   
+#           | term '^' factor   
 #           | factor            
 #       factor:     '(' expr ')'  
 #           |       NUMBER 
@@ -47,7 +52,6 @@
 #
 
 import sys
-import math
 
 ####  CONSTANTS   ################
 
@@ -65,14 +69,14 @@ class Expr :
         raise NotImplementedError(
             'Expr: pure virtual base class.  Do not instantiate' )
 
-    def eval( self, nt, ft ) :
+    def eval( self, nt, ft, ct ) :
         '''Given an environment and a function table, evaluates the expression,
         returns the value of the expression (an int in this grammar)'''
 
         raise NotImplementedError(
             'Expr.eval: virtual method.  Must be overridden.' )
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         'For debugging.'
         raise NotImplementedError(
             'Expr.display: virtual method.  Must be overridden.' )
@@ -83,10 +87,10 @@ class Number( Expr ) :
     def __init__( self, v=0 ) :
         self.value = v
     
-    def eval( self, nt, ft ) :
+    def eval( self, nt, ft, ct ) :
         return self.value
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%s%i" % (tabstop*depth, self.value)
 
 class Ident( Expr ) :
@@ -95,10 +99,10 @@ class Ident( Expr ) :
     def __init__( self, name ) :
         self.name = name
     
-    def eval( self, nt, ft ) :
+    def eval( self, nt, ft, ct ) :
         return nt[ self.name ]
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%s%s" % (tabstop*depth, self.name)
 
 
@@ -110,16 +114,16 @@ class LessThan( Expr ) :
         self.lhs = lhs
         self.rhs = rhs
 
-    def eval( self, nt, ft ) :
-        if self.lhs.eval( nt, ft ) < self.rhs.eval( nt, ft) :
+    def eval( self, nt, ft, ct ) :
+        if self.lhs.eval( nt, ft, ct ) < self.rhs.eval( nt, ft, ct) :
             return 1
         else :
             return 0
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sLESSTHAN" % (tabstop*depth)
-        self.lhs.display( nt, ft, depth+1 )
-        self.rhs.display( nt, ft, depth+1 )
+        self.lhs.display( nt, ft, ct, depth+1 )
+        self.rhs.display( nt, ft, ct, depth+1 )
 
 class GreaterThan( Expr ) :
     '''expression for binary greater than'''
@@ -129,16 +133,16 @@ class GreaterThan( Expr ) :
         self.lhs = lhs
         self.rhs = rhs
 
-    def eval( self, nt, ft ) :
-        if self.lhs.eval( nt, ft ) > self.rhs.eval( nt, ft) :
+    def eval( self, nt, ft, ct ) :
+        if self.lhs.eval( nt, ft, ct ) > self.rhs.eval( nt, ft, ct) :
             return 1
         else :
             return 0
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sGREATERTHAN" % (tabstop*depth)
-        self.lhs.display( nt, ft, depth+1 )
-        self.rhs.display( nt, ft, depth+1 )
+        self.lhs.display( nt, ft, ct, depth+1 )
+        self.rhs.display( nt, ft, ct, depth+1 )
 
 
 class LessEqual( Expr ) :
@@ -149,16 +153,16 @@ class LessEqual( Expr ) :
         self.lhs = lhs
         self.rhs = rhs
 
-    def eval( self, nt, ft ) :
-        if self.lhs.eval( nt, ft ) <= self.rhs.eval( nt, ft) :
+    def eval( self, nt, ft, ct ) :
+        if self.lhs.eval( nt, ft, ct ) <= self.rhs.eval( nt, ft, ct) :
             return 1
         else :
             return 0
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sLESSEQUAL" % (tabstop*depth)
-        self.lhs.display( nt, ft, depth+1 )
-        self.rhs.display( nt, ft, depth+1 )
+        self.lhs.display( nt, ft, ct, depth+1 )
+        self.rhs.display( nt, ft, ct, depth+1 )
 
 class GreaterEqual( Expr ) :
     '''expression for binary greater than or equal'''
@@ -168,16 +172,16 @@ class GreaterEqual( Expr ) :
         self.lhs = lhs
         self.rhs = rhs
 
-    def eval( self, nt, ft ) :
-        if self.lhs.eval( nt, ft ) >= self.rhs.eval( nt, ft) :
+    def eval( self, nt, ft, ct ) :
+        if self.lhs.eval( nt, ft, ct ) >= self.rhs.eval( nt, ft, ct) :
             return 1
         else :
             return 0
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sGREATEREQUAL" % (tabstop*depth)
-        self.lhs.display( nt, ft, depth+1 )
-        self.rhs.display( nt, ft, depth+1 )
+        self.lhs.display( nt, ft, ct, depth+1 )
+        self.rhs.display( nt, ft, ct, depth+1 )
 
 class Equal( Expr ) :
     '''expression for binary equal'''
@@ -187,16 +191,16 @@ class Equal( Expr ) :
         self.lhs = lhs
         self.rhs = rhs
 
-    def eval( self, nt, ft ) :
-        if self.lhs.eval( nt, ft ) == self.rhs.eval( nt, ft) :
+    def eval( self, nt, ft, ct ) :
+        if self.lhs.eval( nt, ft, ct ) == self.rhs.eval( nt, ft, ct) :
             return 1
         else :
             return 0
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sEQUAL" % (tabstop*depth)
-        self.lhs.display( nt, ft, depth+1 )
-        self.rhs.display( nt, ft, depth+1 )
+        self.lhs.display( nt, ft, ct, depth+1 )
+        self.rhs.display( nt, ft, ct, depth+1 )
 
 class NotEqual( Expr ) :
     '''expression for binary greater not equal'''
@@ -206,16 +210,16 @@ class NotEqual( Expr ) :
         self.lhs = lhs
         self.rhs = rhs
 
-    def eval( self, nt, ft ) :
-        if self.lhs.eval( nt, ft ) != self.rhs.eval( nt, ft) :
+    def eval( self, nt, ft, ct ) :
+        if self.lhs.eval( nt, ft, ct ) != self.rhs.eval( nt, ft, ct) :
             return 1
         else :
             return 0
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sGREATERTHAN" % (tabstop*depth)
-        self.lhs.display( nt, ft, depth+1 )
-        self.rhs.display( nt, ft, depth+1 )
+        self.lhs.display( nt, ft, ct, depth+1 )
+        self.rhs.display( nt, ft, ct, depth+1 )
 
 class Times( Expr ) :
     '''expression for binary multiplication'''
@@ -228,14 +232,14 @@ class Times( Expr ) :
         self.lhs = lhs
         self.rhs = rhs
     
-    def eval( self, nt, ft ) :
-        return self.lhs.eval( nt, ft ) * self.rhs.eval( nt, ft )
+    def eval( self, nt, ft, ct ) :
+        return self.lhs.eval( nt, ft, ct ) * self.rhs.eval( nt, ft, ct )
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sMULT" % (tabstop*depth)
-        self.lhs.display( nt, ft, depth+1 )
-        self.rhs.display( nt, ft, depth+1 )
-        #print "%s= %i" % (tabstop*depth, self.eval( nt, ft ))
+        self.lhs.display( nt, ft, ct, depth+1 )
+        self.rhs.display( nt, ft, ct, depth+1 )
+        #print "%s= %i" % (tabstop*depth, self.eval( nt, ft, ct ))
 
 
 class Plus( Expr ) :
@@ -245,14 +249,14 @@ class Plus( Expr ) :
         self.lhs = lhs
         self.rhs = rhs
     
-    def eval( self, nt, ft ) :
-        return self.lhs.eval( nt, ft ) + self.rhs.eval( nt, ft )
+    def eval( self, nt, ft, ct ) :
+        return self.lhs.eval( nt, ft, ct ) + self.rhs.eval( nt, ft, ct )
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sADD" % (tabstop*depth)
-        self.lhs.display( nt, ft, depth+1 )
-        self.rhs.display( nt, ft, depth+1 )
-        #print "%s= %i" % (tabstop*depth, self.eval( nt, ft ))
+        self.lhs.display( nt, ft, ct, depth+1 )
+        self.rhs.display( nt, ft, ct, depth+1 )
+        #print "%s= %i" % (tabstop*depth, self.eval( nt, ft, ct ))
 
 
 class Minus( Expr ) :
@@ -262,14 +266,14 @@ class Minus( Expr ) :
         self.lhs = lhs
         self.rhs = rhs
     
-    def eval( self, nt, ft ) :
-        return self.lhs.eval( nt, ft ) - self.rhs.eval( nt, ft )
+    def eval( self, nt, ft, ct ) :
+        return self.lhs.eval( nt, ft, ct ) - self.rhs.eval( nt, ft, ct )
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sSUB" % (tabstop*depth)
-        self.lhs.display( nt, ft, depth+1 )
-        self.rhs.display( nt, ft, depth+1 )
-        #print "%s= %i" % (tabstop*depth, self.eval( nt, ft ))
+        self.lhs.display( nt, ft, ct, depth+1 )
+        self.rhs.display( nt, ft, ct, depth+1 )
+        #print "%s= %i" % (tabstop*depth, self.eval( nt, ft, ct ))
 
 
 class FunCall( Expr ) :
@@ -280,13 +284,13 @@ class FunCall( Expr ) :
         self.name = name
         self.argList = argList
     
-    def eval( self, nt, ft ) :
-        return ft[ self.name ].apply( nt, ft, self.argList )
+    def eval( self, nt, ft, ct ) :
+        return ft[ self.name ].apply( nt, ft, ct, self.argList )
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sFunction Call: %s, args:" % (tabstop*depth, self.name)
         for e in self.argList :
-            e.display( nt, ft, depth+1 )
+            e.display( nt, ft, ct, depth+1 )
 
 #------------------------------------------------------
 
@@ -297,14 +301,14 @@ class List :
         raise NotImplementedError(
                 'List: pure virtual base class.  Do not instantiate' )
 
-    def eval( self, nt, ft ) :
+    def eval( self, nt, ft, ct ) :
         return NotImplementedError(
                 'List: pure virtual base class.  Must be overwritten' )
 
 class ListStuff() :
     def __init__( self, cont ) :
         self.cont = cont
-    def eval(self, nt, ft ) :
+    def eval(self, nt, ft, ct ) :
         A =[]
         for x in self.cont:
             A.append( x.eval(nt,ft) )
@@ -314,14 +318,14 @@ class NonEmptyList() :
     def __init__( self, cont ) :
         self.cont = cont
 
-    def eval( self, nt, ft ) :
+    def eval( self, nt, ft, ct ) :
         return self.cont
 
 class EmptyList() :
     '''expression to return empty list'''
     def __init__( self ) :
         self.cont = []
-    def eval( self, nt, ft ) :
+    def eval( self, nt, ft, ct ) :
         return self.cont
 
 class Car( List ) :
@@ -329,7 +333,7 @@ class Car( List ) :
     def __init__( self, cont ) :
         self.cont = cont
 
-    def eval( self, nt, ft ) :
+    def eval( self, nt, ft, ct ) :
         A = self.cont.eval(nt,ft)
         return A[0]
 
@@ -338,8 +342,8 @@ class Cdr( List ) :
     def __init__( self, cont ) :
         self.cont = cont
 
-    def eval( self, nt, ft ) :
-        A = self.cont.eval(nt, ft)
+    def eval( self, nt, ft, ct ) :
+        A = self.cont.eval(nt, ft, ct)
         return A[1:]
 
 class Cons( Expr, List ) :
@@ -348,9 +352,9 @@ class Cons( Expr, List ) :
         self.val = v
         self.cont = cont
 
-    def eval( self, nt, ft ) :
-        A = self.cont.eval(nt, ft)
-        B = self.val.eval(nt, ft)
+    def eval( self, nt, ft, ct ) :
+        A = self.cont.eval(nt, ft, ct)
+        B = self.val.eval(nt, ft, ct)
         return A.insert(0, B)
 
 class Null ( List ) :
@@ -358,8 +362,8 @@ class Null ( List ) :
     def __init__( self, cont ) :
         self.cont = cont
 
-    def eval( self, nt, ft ) :
-        A = self.cont.eval(nt, ft)
+    def eval( self, nt, ft, ct ) :
+        A = self.cont.eval(nt, ft, ct)
         if not A :
             return 1
         else :
@@ -375,14 +379,14 @@ class Stmt :
         raise NotImplementedError(
             'Stmt: pure virtual base class.  Do not instantiate' )
 
-    def eval( self, nt, ft ) :
+    def eval( self, nt, ft, ct ) :
         '''Given an environment and a function table, evaluates the expression,
         returns the value of the expression (an int in this grammar)'''
 
         raise NotImplementedError(
             'Stmt.eval: virtual method.  Must be overridden.' )
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         'For debugging.'
         raise NotImplementedError(
             'Stmt.display: virtual method.  Must be overridden.' )
@@ -397,12 +401,12 @@ class AssignStmt( Stmt ) :
         self.name = name
         self.rhs = rhs
     
-    def eval( self, nt, ft ) :
-        nt[ self.name ] = self.rhs.eval( nt, ft )
+    def eval( self, nt, ft, ct ) :
+        nt[ self.name ] = self.rhs.eval( nt, ft, ct )
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sAssign: %s :=" % (tabstop*depth, self.name)
-        self.rhs.display( nt, ft, depth+1 )
+        self.rhs.display( nt, ft, ct, depth+1 )
 
 
 class DefineStmt( Stmt ) :
@@ -412,12 +416,12 @@ class DefineStmt( Stmt ) :
         self.name = name
         self.proc = proc
 
-    def eval( self, nt, ft ) :
+    def eval( self, nt, ft, ct ) :
         ft[ self.name ] = self.proc
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sDEFINE %s :" % (tabstop*depth, self.name)
-        self.proc.display( nt, ft, depth+1 )
+        self.proc.display( nt, ft, ct, depth+1 )
 
 
 class IfStmt( Stmt ) :
@@ -432,19 +436,19 @@ class IfStmt( Stmt ) :
         self.tBody = tBody
         self.fBody = fBody
 
-    def eval( self, nt, ft ) :
-        if self.cond.eval( nt, ft ) > 0 :
-            self.tBody.eval( nt, ft )
+    def eval( self, nt, ft, ct ) :
+        if self.cond.eval( nt, ft, ct ) > 0 :
+            self.tBody.eval( nt, ft, ct )
         else :
-            self.fBody.eval( nt, ft )
+            self.fBody.eval( nt, ft, ct )
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sIF" % (tabstop*depth)
-        self.cond.display( nt, ft, depth+1 )
+        self.cond.display( nt, ft, ct, depth+1 )
         print "%sTHEN" % (tabstop*depth)
-        self.tBody.display( nt, ft, depth+1 )
+        self.tBody.display( nt, ft, ct, depth+1 )
         print "%sELSE" % (tabstop*depth)
-        self.fBody.display( nt, ft, depth+1 )
+        self.fBody.display( nt, ft, ct, depth+1 )
 
 
 class WhileStmt( Stmt ) :
@@ -453,15 +457,15 @@ class WhileStmt( Stmt ) :
         self.cond = cond
         self.body = body
 
-    def eval( self, nt, ft ) :
-        while self.cond.eval( nt, ft ) > 0 :
-            self.body.eval( nt, ft )
+    def eval( self, nt, ft, ct ) :
+        while self.cond.eval( nt, ft, ct ) > 0 :
+            self.body.eval( nt, ft, ct )
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sWHILE" % (tabstop*depth)
-        self.cond.display( nt, ft, depth+1 )
+        self.cond.display( nt, ft, ct, depth+1 )
         print "%sDO" % (tabstop*depth)
-        self.body.display( nt, ft, depth+1 )
+        self.body.display( nt, ft, ct, depth+1 )
 
 class ForStmt( Stmt ) :
 
@@ -471,39 +475,29 @@ class ForStmt( Stmt ) :
         self.inc = inc
         self.body = body
 
-    def eval( self, nt, ft ) :
-        self.assing.eval(nt, ft)
-        while self.cond.eval( nt, ft ) > 0 :
-            self.body.eval( nt, ft )
-            self.inc.eval(nt, ft)
+    def eval( self, nt, ft, ct ) :
+        self.assing.eval(nt, ft, ct)
+        while self.cond.eval( nt, ft, ct ) > 0 :
+            self.body.eval( nt, ft, ct )
+            self.inc.eval(nt, ft, ct)
 
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sFOR" % (tabstop*depth)
-        self.assing.display(nt, ft, depth+1)
-        self.cond.display( nt, ft, depth+1 )
-        self.inc.display( nt, ft, depth+1 )
+        self.assing.display(nt, ft, ct, depth+1)
+        self.cond.display( nt, ft, ct, depth+1 )
+        self.inc.display( nt, ft, ct, depth+1 )
         print "%sDO" % (tabstop*depth)
-        self.body.display( nt, ft, depth+1 )
-
-class Pow( Expr ) :
-    '''expression for sending to a power'''
-
-    def __init__( self, root, power ) :
-        '''root, power are Expr's, the operands'''
-
-        self.root = root
-        self.power = power
-    
-    def eval( self, nt, ft ) :
-        return math.pow(self.root.eval( nt, ft ), self.power.eval( nt, ft ))
-
-    def display( self, nt, ft, depth=0 ) :
-        print "%s^" % (tabstop*depth)
-        self.power.display( nt, ft, depth+1 )
-        self.root.display( nt, ft, depth+1 )
-        #print "%s= %i" % (tabstop*depth, self.eval( nt, ft ))
+        self.body.display( nt, ft, ct, depth+1 )
 
 #-------------------------------------------------------
+class ClassStmt( Stmt ):
+    def __init__(self, ident, paramList, body):
+        self.name = ident
+    def eval( self, nt, ft, ct ) :
+        ft[ self.name ] = self.proc
+    def display(self, nt, ft, ct):
+        pass
+
 
 class StmtList :
     '''builds/stores a list of Stmts'''
@@ -514,14 +508,14 @@ class StmtList :
     def insert( self, stmt ) :
         self.sl.insert( 0, stmt )
     
-    def eval( self, nt, ft ) :
+    def eval( self, nt, ft, ct ) :
         for s in self.sl :
-            s.eval( nt, ft )
+            s.eval( nt, ft, ct )
     
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sSTMT LIST" % (tabstop*depth)
         for s in self.sl :
-            s.display( nt, ft, depth+1 )
+            s.display( nt, ft, ct, depth+1 )
 
 
 class Proc :
@@ -541,7 +535,7 @@ class Proc :
         self.parList = paramList
         self.body = body
 
-    def apply( self, nt, ft, args ) :
+    def apply( self, nt, ft, ct, args ) :
         newContext = {}
 
         # sanity check, # of args
@@ -552,7 +546,7 @@ class Proc :
         # bind parameters in new name table (the only things there right now)
             # use zip, bastard
         for i in range( len( args )) :
-            newContext[ self.parList[i] ] = args[i].eval( nt, ft )
+            newContext[ self.parList[i] ] = args[i].eval( nt, ft, ct )
 
         # evaluate the function body using the new name table and the old (only)
         # function table.  Note that the proc's return value is stored as
@@ -565,9 +559,9 @@ class Proc :
             print "Error:  no return value"
             sys.exit( 2 )
     
-    def display( self, nt, ft, depth=0 ) :
+    def display( self, nt, ft, ct, depth=0 ) :
         print "%sPROC %s :" % (tabstop*depth, str(self.parList))
-        self.body.display( nt, ft, depth+1 )
+        self.body.display( nt, ft, ct, depth+1 )
 
 
 class Program :
@@ -598,6 +592,7 @@ n = Plus( Number(17), Number(25) )
 l = [ n ]
 nt = {}
 ft = {}
-result = [ i.eval( nt, ft ) for i in l ]
+ct = {}
+result = [ i.eval( nt, ft, ct ) for i in l ]
 print result
 

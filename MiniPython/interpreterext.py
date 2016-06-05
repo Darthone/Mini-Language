@@ -49,37 +49,41 @@ tokens = (
     'IDENT',
     'FOR',
     'POW',
-        'LESSTHAN',
-        'GREATERTHAN',
-        'GREATEREQUAL',
-        'LESSEQUAL',
-        'EQUAL',
-        'NOTEQUAL',
-        'LBRACKET',
-        'RBRACKET',
-        'CAR',
-        'CDR',
-        'CONS',
-        'NULL'
+    'LESSTHAN',
+    'GREATERTHAN',
+    'GREATEREQUAL',
+    'LESSEQUAL',
+    'EQUAL',
+    'NOTEQUAL',
+    'LBRACKET',
+    'RBRACKET',
+    'PERIOD',
+    'COLON',
+    'CAR',
+    'CDR',
+    'CONS',
+    'NULL',
+    'CLASS'
 )
 
     # These are all caught in the IDENT rule, typed there.
 reserved = {
         'while' : 'WHILE',
-        'for' : 'FOR',
-        'do'        : 'DO',
-        'od'        : 'OD',
-        'if'        : 'IF',
+        'for'   : 'FOR',
+        'do'    : 'DO',
+        'od'    : 'OD',
+        'if'    : 'IF',
         'then'  : 'THEN',
         'else'  : 'ELSE',
-        'fi'        : 'FI',
+        'fi'    : 'FI',
         'define': 'DEFINE',
         'proc'  : 'PROC',
-        'end'       : 'END',
-                'car'   : 'CAR',
-                'cdr'   : 'CDR',
-                'cons'  : 'CONS',
-                'null'  : 'NULL'
+        'end'   : 'END',
+        'car'   : 'CAR',
+        'cdr'   : 'CDR',
+        'cons'  : 'CONS',
+        'null'  : 'NULL',
+        'class' : 'CLASS'
         }
 
 # Now, this section.  We have a mapping, REs to token types (please note
@@ -97,7 +101,9 @@ t_LPAREN    = r'\('
 t_RPAREN    = r'\)'
 t_ASSIGNOP = r':='
 t_SEMICOLON = r';'
+t_COLON = r':'
 t_COMMA     = r','
+t_PERIOD     = r'\.'
 t_LESSTHAN = r'<'
 t_GREATERTHAN = r'>'
 t_GREATEREQUAL = r'>='
@@ -163,6 +169,8 @@ def p_stmt_list( p ) :
 
 def p_stmt( p ) :
     '''stmt : assign_stmt
+                | class_stmt
+                | class_inherit_stmt
                 | while_stmt
                 | for_stmt
                 | if_stmt
@@ -268,6 +276,14 @@ def p_fact_funcall( p ) :
     'fact : func_call'
     p[0] = p[1]
 
+def p_class_fact_funcall( p ) :
+    'fact : class_func_call'
+    p[0] = p[1]
+
+def p_class_member( p ) :
+    'fact : class_member'
+    p[0] = p[1]
+
 def p_assn( p ) :
     'assign_stmt : IDENT ASSIGNOP expr'
     p[0] = AssignStmt( p[1], p[3] )
@@ -283,6 +299,22 @@ def p_for( p ) :
 def p_pow( p ) :
     '''term : term POW fact'''
     p[0] = Pow( p[1], p[3] )
+
+def p_class( p ) :
+    'class_stmt : CLASS IDENT LPAREN param_list RPAREN stmt_list END'
+    p[0] = ClassStmt(p[2], p[4], p[6])
+
+def p_class( p ) :
+    'class_inherit_stmt : CLASS IDENT LPAREN param_list RPAREN  COLON IDENT stmt_list END'
+    p[0] = ClassInheritStmt(p[2], p[4], p[6]) // TODO
+
+def p_class_member( p ):
+    'class_member : IDENT PERIOD IDENT'
+    p[0] = ClassMem(p[2], p[4], p[6])
+
+def p_class_function_call( p ):
+    'class_func_call : IDENT PERIOD funcall'
+    p[0] = ClassFunCall( p[1], p[3] )
 
 def p_if( p ) :
     'if_stmt : IF expr THEN stmt_list ELSE stmt_list FI'
