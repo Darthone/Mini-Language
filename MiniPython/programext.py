@@ -54,6 +54,7 @@
 #           |      expr 
 #
 
+import math
 import copy
 import sys
 
@@ -262,6 +263,23 @@ class Plus( Expr ) :
         self.rhs.display( nt, ft, ct, depth+1 )
         #print "%s= %i" % (tabstop*depth, self.eval( nt, ft, ct ))
 
+class Pow( Expr ) :
+    '''expression for sending to a power'''
+
+    def __init__( self, root, power ) :
+        '''root, power are Expr's, the operands'''
+
+        self.root = root
+        self.power = power
+    
+    def eval( self, nt, ft, ct) :
+        return math.pow(self.root.eval( nt, ft, ct), self.power.eval( nt, ft, ct))
+
+    def display( self, nt, ft, ct, depth=0 ) :
+        print "%s^" % (tabstop*depth)
+        self.power.display( nt, ft, ct, depth+1 )
+        self.root.display( nt, ft, ct, depth+1 )
+        #print "%s= %i" % (tabstop*depth, self.eval( nt, ft ))
 
 class Minus( Expr ) :
     '''expression for binary subtraction'''
