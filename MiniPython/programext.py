@@ -31,7 +31,8 @@
 #           |  while_stmt 
 #       assign_stmt: IDENT ASSIGNOP expr
 #       define_stmt: DEFINE IDENT PROC '(' param_list ')' stmt_list END
-#       if_stmt: IF expr THEN stmt_list ELSE stmt_list FI
+#       if_stmt: IF expr THEN stmt_list elif_stmt ELSE stmt_list FI
+#       elif_stmt : ELIF expr THEN stmt_list elif_stmt | e
 #       for_stmt: FOR assign_stmt ';' expr  ';' assign_stmt DO stmt_list OD
 #       class_stmt: CLASS IDENT '(' param_list ')' stmt_list END
 #       class_inherit_stmt: CLASS IDENT '(' param_list ')' ':' IDENT stmt_list END
@@ -53,6 +54,7 @@
 #           |      expr 
 #
 
+import copy
 import sys
 
 ####  CONSTANTS   ################
@@ -313,7 +315,7 @@ class ListStuff() :
     def eval(self, nt, ft, ct ) :
         A =[]
         for x in self.cont:
-            A.append( x.eval(nt,ft) )
+            A.append( x.eval(nt,ft, ct) )
         return A
 class NonEmptyList() :
     '''expression to return non-empty list'''
@@ -336,7 +338,7 @@ class Car( List ) :
         self.cont = cont
 
     def eval( self, nt, ft, ct ) :
-        A = self.cont.eval(nt,ft)
+        A = self.cont.eval(nt,ft, ct)
         return A[0]
 
 class Cdr( List ) :
@@ -517,11 +519,93 @@ class ClassStmt( Stmt ):
         self.paramList = paramList
         self.body = body
 
+    def eval( self, nt, ft, ct):
+        ct[ self.name ] = Class(self.name, self.paramList, self.body)
+    
+    def display( self, nt, ft, ct, depth=0):
+        print "%sCLASS" % (tabstop*depth)
+        
+class NewClass( Expr ):
+    '''stores a class call:
+      - its name, and arguments'''
+    
+    def __init__( self, name, argList ) :
+        self.name = name
+        self.argList = argList
+    
     def eval( self, nt, ft, ct ) :
-        ct[ self.name ] = self.body
+        return ct[ self.name ].create( nt, ft, ct, self.argList )
 
-    def display(self, nt, ft, ct):
-        pass
+    def display( self, nt, ft, ct, depth=0 ) :
+        print "%sNew Class Call: %s, args:" % (tabstop*depth, self.name)
+        for e in self.argList :
+            e.display( nt, ft, ct, depth+1 )
+
+class ClassMem( Expr ) :
+    '''stores a class function call:
+      - its name, and arguments'''
+    
+    def __init__( self, objectName, memName ) :
+        self.name = objectName
+        self.mem = memName
+    
+    def eval( self, nt, ft, ct ) :
+        thing =  nt[ self.name ]
+        nt_ = {}
+        nt_.update(thing[0])
+        ft_ = {}
+        ft_.update(thing[1])
+        return nt_[self.mem]
+
+    def display( self, nt, ft, ct, depth=0 ) :
+        print "%sClass Function Call: %s, args:" % (tabstop*depth, self.name)
+
+
+class ClassFunCall( Expr ) :
+    '''stores a class function call:
+      - its name, and arguments'''
+    
+    def __init__( self, objectName, funName, argList ) :
+        self.name = objectName
+        self.fun = funName
+        self.argList = argList
+    
+    def eval( self, nt, ft, ct ) :
+        thing =  nt[ self.name ]
+        nt_ = nt.copy()
+        nt_.update(thing[0])
+        ft_ = ft.copy()
+        ft_.update(thing[1])
+
+        return thing[1][self.fun].apply( nt_, ft_, ct, self.argList )
+
+    def display( self, nt, ft, ct, depth=0 ) :
+        print "%sClass Function Call: %s, args:" % (tabstop*depth, self.name)
+        for e in self.argList :
+            e.display( nt, ft, ct, depth+1 )
+
+
+class Class:
+    def __init__(self, ident, paramList, body):
+        self.name = ident
+        self.paramList = paramList
+        self.body = body
+
+    def create( self, nt, ft, ct, args):
+        newContext = {}
+        ftContext = copy.deepcopy(ft) # should we copy the program ft into here?
+
+        # sanity check, # of args
+        if len( args ) is not len( self.paramList ) :
+            print "Param count does not match:"
+            sys.exit( 1 )
+
+        for i in range( len( args )) :
+            newContext[ self.paramList[i] ] = args[i].eval( nt, ft, ct )
+
+        self.body.eval( newContext, ftContext, ct)
+        return (newContext, ftContext);
+
 
 
 class StmtList :
@@ -561,23 +645,24 @@ class Proc :
         self.body = body
 
     def apply( self, nt, ft, ct, args ) :
-        newContext = {}
+        newContext = nt.copy()
 
         # sanity check, # of args
-        if len( args ) is not len( self.parList ) :
+        if not self.parList[0] is None and len( args ) is not len( self.parList ) :
             print "Param count does not match:"
             sys.exit( 1 )
 
         # bind parameters in new name table (the only things there right now)
             # use zip, bastard
-        for i in range( len( args )) :
-            newContext[ self.parList[i] ] = args[i].eval( nt, ft, ct )
+        if self.parList[0] is not None:
+            for i in range( len( args )) :
+                newContext[ self.parList[i] ] = args[i].eval( nt, ft, ct )
 
         # evaluate the function body using the new name table and the old (only)
         # function table.  Note that the proc's return value is stored as
         # 'return in its nametable
 
-        self.body.eval( newContext, ft )
+        self.body.eval( newContext, ft, ct )
         if newContext.has_key( returnSymbol ) :
             return newContext[ returnSymbol ]
         else :

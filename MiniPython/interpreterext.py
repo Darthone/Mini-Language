@@ -64,7 +64,8 @@ tokens = (
     'CDR',
     'CONS',
     'NULL',
-    'CLASS'
+    'CLASS',
+    'NEW'
 )
 
     # These are all caught in the IDENT rule, typed there.
@@ -85,7 +86,8 @@ reserved = {
         'cdr'   : 'CDR',
         'cons'  : 'CONS',
         'null'  : 'NULL',
-        'class' : 'CLASS'
+        'class' : 'CLASS',
+        'new'   : 'NEW'
         }
 
 # Now, this section.  We have a mapping, REs to token types (please note
@@ -116,8 +118,7 @@ t_LBRACKET = r'\['
 t_RBRACKET = r'\]'
 
 def t_IDENT( t ):
-    #r'[a-zA-Z_][a-zA-Z_0-9]*'
-    r'[a-z]+'
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
     t.type = reserved.get( t.value, 'IDENT' )    # Check for reserved words
     return t
 
@@ -242,13 +243,16 @@ def p_list_stuff_null ( p ) :
     p[0] = Null(p[2])
 
 def p_expr_list( p ) :
-  '''expr_list : expr COMMA expr_list
-              | expr'''
-  if len( p ) == 2 :  # single expr => new list
-    p[0] = [ p[1] ]
-  else :  # we have a expr_list, keep adding to front
-    p[3].insert( 0, p[1] )
-    p[0] = p[3]
+    '''expr_list : expr COMMA expr_list
+              | expr
+              |'''
+    if len( p ) == 1 :  # empty list
+        p[0] = p[0]
+    elif len( p ) == 2 :  # single expr => new list
+        p[0] = [ p[1] ]
+    else :  # we have a expr_list, keep adding to front
+        p[3].insert( 0, p[1] )
+        p[0] = p[3]
 
 def p_expr_term( p ) :
     'expr : term'
@@ -282,6 +286,10 @@ def p_fact_class_funcall( p ) :
     'fact : class_func_call'
     p[0] = p[1]
 
+def p_fact_new_class( p ) :
+    'fact : new_call'
+    p[0] = p[1]
+
 def p_fact_class_member( p ) :
     'fact : class_member'
     p[0] = p[1]
@@ -307,8 +315,8 @@ def p_class( p ) :
     p[0] = ClassStmt(p[2], p[4], p[6])
 
 def p_class_inherit( p ) :
-    'class_inherit_stmt : CLASS IDENT LPAREN param_list RPAREN  COLON IDENT stmt_list END'
-    p[0] = ClassInheritStmt(p[2], p[4], p[6]) // TODO
+    'class_inherit_stmt : CLASS IDENT LPAREN param_list RPAREN COLON IDENT stmt_list END'
+    p[0] = ClassInheritStmt(p[2], p[4], p[7], p[8]) # TODO
 
 def p_class_member( p ):
     'class_member : IDENT PERIOD IDENT'
@@ -316,7 +324,7 @@ def p_class_member( p ):
 
 def p_class_function_call( p ):
     'class_func_call : IDENT PERIOD IDENT LPAREN expr_list RPAREN'
-    p[0] = ClassFunCall( p[1], p[3] )
+    p[0] = ClassFunCall( p[1], p[3], p[5] )
 
 def p_if( p ) :
     'if_stmt : IF expr THEN stmt_list elif_stmt ELSE stmt_list FI'
@@ -325,7 +333,7 @@ def p_if( p ) :
 def p_elif( p ) :
 	'''elif_stmt :
             | ELIF expr THEN stmt_list elif_stmt'''
-        if len ( p ) == 0 :
+        if len ( p ) == 1 :
             p[0] = p[0]
         else :
             p[0] = Elifstmt( p[2], p[4], p[5] )
@@ -335,18 +343,24 @@ def p_def( p ) :
   p[0] = DefineStmt( p[2], Proc( p[5], p[7] ))
 
 def p_param_list( p ) :
-  '''param_list : IDENT COMMA param_list
+    '''param_list : 
+              | IDENT COMMA param_list
               | IDENT'''
-  if len( p ) == 2 :  # single param => new list
-    p[0] = [ p[1] ]
-  else :  # we have a param_list, keep adding to front
-    p[3].insert( 0, p[1] )
-    p[0] = p[3]
+    if len ( p ) == 1 : # empty paramList
+        p[0] = [p[0]]
+    elif len( p ) == 2 :  # single param => new list
+        p[0] = [ p[1] ]
+    else :  # we have a param_list, keep adding to front
+        p[3].insert( 0, p[1] )
+        p[0] = p[3]
 
 def p_func_call( p ) :
   'func_call : IDENT LPAREN expr_list RPAREN'
   p[0] = FunCall( p[1], p[3] )
 
+def p_new_call( p ) :
+  'new_call : NEW IDENT LPAREN expr_list RPAREN'
+  p[0] = NewClass( p[2], p[4] )
 
 # Error rule for syntax errors
 def p_error( p ):
