@@ -327,14 +327,14 @@ def p_class_function_call( p ):
     p[0] = ClassFunCall( p[1], p[3], p[5] )
 
 def p_if( p ) :
-    'if_stmt : IF expr THEN stmt_list elif_stmt ELSE stmt_list FI'
-    p[0] = IfStmt( p[2], p[4], p[7] )
+    'if_stmt : IF expr THEN stmt_list elif_stmt'
+    p[0] = IfStmt( p[2], p[4], p[5] )
 
 def p_elif( p ) :
-	'''elif_stmt :
+	'''elif_stmt : ELSE stmt_list FI
             | ELIF expr THEN stmt_list elif_stmt'''
-        if len ( p ) == 1 :
-            p[0] = p[0]
+        if len ( p ) == 4 :
+            p[0] = ElseStmt( p[2] )
         else :
             p[0] = Elifstmt( p[2], p[4], p[5] )
 

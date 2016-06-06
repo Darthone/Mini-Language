@@ -479,18 +479,32 @@ class Elifstmt( Stmt ) :
 		self.tBody = tBody
 		self.fBody = fBody
 
-	def eval( self, nt, ft ) :
-		if self.cond.eval( nt, ft ) > 0 :
-			self.tBody.eval( nt, ft )
+	def eval( self, nt, ft , ct) :
+		if self.cond.eval( nt, ft, ct) > 0 :
+			self.tBody.eval( nt, ft, ct )
 		else:
-			self.fBody.eval( nt, ft)
+			self.fBody.eval( nt, ft, ct)
 	def display( self, nt, ft, depth=0 ) :
 		print "%sELIF" % (tabstop*depth)
-		self.cond.display( nt, ft, depth+1) 
+		self.cond.display( nt, ft, ct, depth+1) 
 		print "%sTHEN" % (tabstop*depth)
-		self.tBody.display( nt, ft, depth+1 )
-		self.fBody.display( nt, ft, depth+1 )
+		self.tBody.display( nt, ft, ct, depth+1 )
+		self.fBody.display( nt, ft, ct, depth+1 )
 
+class ElseStmt( Stmt ) :
+	
+	def __init__( self, body) :
+		self.body = body
+
+	def eval( self, nt, ft, ct ) :
+		self.body.eval( nt, ft, ct, newContext)
+
+	def display( self, nt, ft, depth=0 ) :
+		print "%sELIF" % (tabstop*depth)
+		self.cond.display( nt, ft, ct, depth+1) 
+		print "%sTHEN" % (tabstop*depth)
+		self.tBody.display( nt, ft, ct, depth+1 )
+		self.fBody.display( nt, ft, ct, depth+1 )
 
 class WhileStmt( Stmt ) :
 
